@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RobuxPlanet - Получите бесплатные робуксы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" type="image/png">
+    <style>
+        :root {
+            --primary-dark: #1a1a2e; /* Основной очень темный фон */
+            --secondary-dark: #16213e; /* Темнее для шапки/футера */
+            --card-dark: #0f3460; /* Темный фон для карточек */
+            --accent-blue: #007bff; /* Основной синий для кнопок/ссылок */
+            --light-blue: #66b2ff; /* Светлый синий для заголовков */
+            --text-color: #e0e0e0; /* Светлый текст */
+            --highlight-color: #ffc107; /* Желтый для наград (опционально) */
+            --border-color: #0056b3; /* Синий для границ */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            background: var(--secondary-dark);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-blue);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .header .logo-img {
+            max-width: 150px; /* Размер логотипа */
+            margin-bottom: 10px;
+        }
+
+        .nav-menu {
+            background: var(--card-dark);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .image-section {
+            text-align: center;
+            padding: 40px 0;
+            background-color: var(--primary-dark);
+        }
+
+        .image-section img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .image-section img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .content-section {
+            padding: 40px 0;
+            background-color: var(--primary-dark);
+        }
+
+        .content-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--light-blue);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .task-card {
+            background: var(--card-dark);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .task-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .task-card h3 {
+            color: var(--highlight-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .task-card p {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .task-reward {
+            color: var(--light-blue);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .button {
+            background: var(--accent-blue);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: var(--light-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--secondary-dark);
+            color: var(--text-color);
+            margin-top: 40px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Стили для админ-панели */
+        .admin-panel {
+            background-color: var(--card-dark);
+            border: 1px solid var(--accent-blue);
+            padding: 2rem;
+            margin-top: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .admin-panel h2 {
+            color: var(--light-blue);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-actions .button {
+            width: auto;
+            margin: 10px;
+            display: inline-block; /* Чтобы кнопки были в ряд */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Logo" class="logo-img">
+            <h1>RobuxPlanet</h1>
+            <p>Получайте бесплатные робуксы за выполнение заданий</p>
+            <div class="balance-display">
+                Ваш баланс: <span id="robuxBalance">0</span> R$
+            </div>
+        </div>
+    </div>
+
+    <div class="login-incentive-message container">
+        <h2>Для получения всех призов и доступа к лучшим функциям - войдите на сайт!</h2>
+        <p>Войдите или зарегистрируйтесь, чтобы получить:</p>
+        <ul>
+            <li>Настоящий баланс робуксов (наш сайт не хранит робуксы без входа!)</li>
+            <li>Эксклюзивные задания и бонусы</li>
+            <li>Отслеживание вашего прогресса</li>
+            <li>Участие в розыгрышах и акциях</li>
+            <li>Безопасное управление аккаунтом</li>
+        </ul>
+        <a href="login.html" class="button">Войти сейчас</a>
+    </div>
+
+    <nav class="nav-menu">
+        <div class="container">
+            <a href="site.html">Главная</a>
+            <a href="#tasks-section">Задания</a>
+            <a href="#">Купить R$</a>
+            <a href="#">Купить Limited</a>
+            <a href="login.html">Войти</a>
+        </div>
+    </nav>
+
+    <section id="adminPanel" class="admin-panel" style="display: none;">
+        <div class="container">
+            <h2><span id="adminUsernameDisplay"></span>, добро пожаловать в панель администратора!</h2>
+            <p>Здесь вы можете управлять сайтом. (Имитация)</p>
+            <div class="admin-actions">
+                <button class="button">Проверить заявки на верификацию</button>
+                <button class="button">Начислить робуксы игроку</button>
+                <button class="button">Управление заданиями</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="image-section">
+        <div class="container">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Character Logo" class="logo-img">
+        </div>
+    </section>
+
+    <section class="interactive-features">
+        <div class="container">
+            <div class="feature-card daily-bonus-card">
+                <h2>Ежедневный бонус!</h2>
+                <p>Забирайте свой ежедневный бонус робуксов!</p>
+                <button class="button" id="dailyBonusBtn">Забрать бонус</button>
+                <p id="dailyBonusMessage" style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;"></p>
+            </div>
+
+            <div class="feature-card recent-payouts-card">
+                <h2>Недавние выплаты</h2>
+                <div class="payouts-list" id="payoutsList">
+                    <!-- Выплаты будут добавляться здесь динамически -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" id="tasks-section">
+        <div class="container">
+            <h2>Доступные задания</h2>
+            <div class="tasks-grid">
+                <div class="task-card">
+                    <h3>Подписка на YouTube</h3>
+                    <p>Подпишитесь на наш YouTube канал, чтобы поддержать нас и получить робуксы!</p>
+                    <p class="task-reward">Награда: 50 R$</p>
+                    <button class="button">Выполнить</button>
+                </div>
+
+                <div class="task-card">
+                    <h3>Вступление в Discord</h3>
+                    <p>Присоединитесь к нашему Discord серверу для общения и эксклюзивных розыгрышей.</p>
+                    <p class="task-reward">Награда: 100 R$</p>
+                    <button class="button">Выполнить</button>
+                </div>
+
+                <div class="task-card">
+                    <h3>Лайк на видео</h3>
+                    <p>Поставьте лайк на наше последнее видео. Ваша поддержка очень важна!</p>
+                    <p class="task-reward">Награда: 25 R$</p>
+                    <button class="button">Выполнить</button>
+                </div>
+
+                <div class="task-card">
+                    <h3>Приглашение друга</h3>
+                    <p>Пригласите друга на сайт, и когда он выполнит первое задание, вы получите награду.</p>
+                    <p class="task-reward">Награда: 200 R$</p>
+                    <button class="button">Выполнить</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 RobuxPlanet. Все права защищены.</p>
+            <p>Создано: Majorka_Skrutov и ThisGuyTied</p>
+        </div>
+    </footer>
+
+    <script>
+        let robuxBalance = 0;
+        const robuxBalanceElement = document.getElementById('robuxBalance');
+        const dailyBonusBtn = document.getElementById('dailyBonusBtn');
+        const dailyBonusMessage = document.getElementById('dailyBonusMessage');
+        const payoutsList = document.getElementById('payoutsList');
+
+        // Загрузка баланса из локального хранилища (если есть)
+        if (localStorage.getItem('robuxBalance')) {
+            robuxBalance = parseInt(localStorage.getItem('robuxBalance'));
+            robuxBalanceElement.textContent = robuxBalance;
+        }
+
+        // Ежедневный бонус
+        dailyBonusBtn.addEventListener('click', () => {
+            const lastClaimDate = localStorage.getItem('lastDailyBonusClaim');
+            const today = new Date().toDateString();
+
+            if (lastClaimDate === today) {
+                dailyBonusMessage.textContent = 'Вы уже забрали свой ежедневный бонус сегодня! Возвращайтесь завтра.';
+                dailyBonusMessage.style.color = 'orange';
+            } else {
+                const bonusAmount = Math.floor(Math.random() * 50) + 10; // От 10 до 59 R$
+                robuxBalance += bonusAmount;
+                robuxBalanceElement.textContent = robuxBalance;
+                localStorage.setItem('robuxBalance', robuxBalance);
+                localStorage.setItem('lastDailyBonusClaim', today);
+                dailyBonusMessage.textContent = `Поздравляем! Вы получили ${bonusAmount} R$!`;
+                dailyBonusMessage.style.color = 'lightgreen';
+            }
+        });
+
+        // Имитация живой ленты выплат
+        const dummyUsers = ['Player1337', 'RobloxFan_X', 'ProGamer22', 'RobbyBucks', 'blox_master', 'Guest_404', 'EpicWin', 'RobuxPro', 'LegendaryPlayer'];
+        function addPayoutEntry() {
+            const randomUser = dummyUsers[Math.floor(Math.random() * dummyUsers.length)];
+            const randomAmount = Math.floor(Math.random() * 500) + 50; // От 50 до 549 R$
+            const entry = document.createElement('p');
+            entry.innerHTML = `<span style="color: var(--light-blue);">${randomUser}</span> получил <span style="color: var(--highlight-color);">${randomAmount} R$</span>`;
+            payoutsList.prepend(entry); // Добавляем в начало списка
+
+            // Ограничиваем количество записей, чтобы список не становился слишком длинным
+            if (payoutsList.children.length > 5) {
+                payoutsList.removeChild(payoutsList.lastChild);
+            }
+        }
+
+        // Добавляем новую запись каждые 3-7 секунд
+        setInterval(addPayoutEntry, Math.floor(Math.random() * 4000) + 3000);
+
+        // Инициализация нескольких записей при загрузке
+        for (let i = 0; i < 3; i++) {
+            addPayoutEntry();
+        }
+
+        // Логика отображения панели администратора
+        const adminPanel = document.getElementById('adminPanel');
+        const adminUsernameDisplay = document.getElementById('adminUsernameDisplay');
+        const loggedInUser = localStorage.getItem('loggedInUsername');
+
+        if (loggedInUser === '310x216') {
+            adminUsernameDisplay.textContent = loggedInUser;
+            adminPanel.style.display = 'block'; // Показываем панель
+        }
+    </script>
+</body>
+</html> 

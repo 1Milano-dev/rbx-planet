@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RobuxPlanet - Главная</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark-red: #330000;
+            --secondary-red: #660000;
+            --accent-red: #B20000;
+            --light-red: #FF6666;
+            --text-color: #FFFFFF;
+            --accent-yellow: #FFD700;
+            --card-background: #440000;
+            --border-color: #770000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary-dark-red);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            background: var(--secondary-red);
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--light-red);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            background: var(--accent-red);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--light-red);
+            transform: translateY(-2px);
+        }
+
+        .image-section {
+            text-align: center;
+            padding: 40px 0;
+            background-color: var(--primary-dark-red);
+        }
+
+        .image-section img {
+            max-width: 250px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .image-section img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .content-section {
+            padding: 40px 0;
+            background-color: var(--primary-dark-red);
+        }
+
+        .content-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--light-red);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-card h3 {
+            color: var(--accent-yellow);
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-card p {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .button {
+            background: var(--light-red);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .button:hover {
+            background: var(--accent-red);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            background-color: var(--secondary-red);
+            color: var(--text-color);
+            margin-top: 40px;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>RobuxPlanet</h1>
+            <p>Ваш надежный источник бесплатных робуксов!</p>
+        </div>
+    </div>
+
+    <nav class="nav-menu">
+        <div class="container">
+            <a href="#">Главная</a>
+            <a href="#">Задания</a>
+            <a href="#">Купить R$</a>
+            <a href="#">Войти</a>
+        </div>
+    </nav>
+
+    <section class="image-section">
+        <div class="container">
+            <img src="https://raw.githubusercontent.com/username/repo/main/path/to/your/ban_hammer_image.png" alt="Roblox Character">
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <h2>О нас</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Быстро и просто</h3>
+                    <p>Получайте робуксы быстро, выполняя простые задания.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Надежно и безопасно</h3>
+                    <p>Мы гарантируем безопасность ваших данных и транзакций.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Большой выбор заданий</h3>
+                    <p>Всегда найдется задание по душе, чтобы заработать робуксы.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 RobuxPlanet. Все права защищены.</p>
+            <p>Создано: Majorka_Skrutov и ThisGuyTied</p>
+        </div>
+    </footer>
+</body>
+</html> 

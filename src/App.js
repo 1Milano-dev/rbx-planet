@@ -9,6 +9,8 @@ import BuyRobux from './pages/BuyRobux';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import Profile from './pages/Profile';
+import FAQ from './pages/FAQ';
+import Feedback from './pages/Feedback';
 
 const darkTheme = createTheme({
   palette: {
@@ -65,6 +67,8 @@ function App() {
             } 
           />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
       </Router>
     </ThemeProvider>

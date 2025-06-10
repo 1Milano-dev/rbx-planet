@@ -16,12 +16,15 @@ import {
   useTheme,
   Fade,
   Zoom,
-  TextField
+  TextField,
+  Chip
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 const darkBg = '#181A20';
 const cardBg = '#23263a';
@@ -62,21 +65,30 @@ const tasks = [
   },
 ];
 
+const getUserData = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) return null;
+  if (!user.completedTasks) user.completedTasks = [];
+  if (!user.balance) user.balance = 0;
+  if (!user.history) user.history = [];
+  if (!user.achievements) user.achievements = [];
+  return user;
+};
+
+const saveUserData = (user) => {
+  localStorage.setItem('user', JSON.stringify(user));
+};
+
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [completedTasks, setCompletedTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('completedTasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [user, setUser] = useState(getUserData());
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', type: 'success' });
   const theme = useTheme();
 
   React.useEffect(() => {
-    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-  }, [completedTasks]);
+    localStorage.setItem('completedTasks', JSON.stringify(user.completedTasks));
+  }, [user.completedTasks]);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -85,23 +97,51 @@ const Tasks = () => {
 
   const handleCompleteTask = () => {
     if (selectedTask) {
-      if (!completedTasks.includes(selectedTask.id)) {
-        setCompletedTasks([...completedTasks, selectedTask.id]);
-        setSnackbarMessage(`Задание "${selectedTask.title}" выполнено! Робуксы ${selectedTask.reward} R$ будут начислены.`);
-        setSnackbarSeverity('success');
-        setOpenSnackbar(true);
+      if (!user.completedTasks.includes(selectedTask.id)) {
+        const newUser = { ...user };
+        newUser.completedTasks = [...newUser.completedTasks, selectedTask.id];
+        newUser.balance = (newUser.balance || 0) + selectedTask.reward;
+        newUser.history = [
+          {
+            type: 'task',
+            amount: selectedTask.reward,
+            date: new Date().toISOString(),
+            desc: `Выполнено задание: ${selectedTask.title}`
+          },
+          ...(newUser.history || [])
+        ];
+        // Ачивка за первое задание
+        if (!newUser.achievements.includes('first-task')) {
+          newUser.achievements.push('first-task');
+        }
+        saveUserData(newUser);
+        setUser(newUser);
+        setSnackbar({ open: true, message: `Задание "${selectedTask.title}" выполнено! +${selectedTask.reward} R$`, type: 'success' });
       } else {
-        setSnackbarMessage('Это задание уже выполнено!');
-        setSnackbarSeverity('info');
-        setOpenSnackbar(true);
+        setSnackbar({ open: true, message: 'Это задание уже выполнено!', type: 'info' });
       }
     }
     setOpenDialog(false);
   };
 
   const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
+    setSnackbar({ ...snackbar, open: false });
   };
+
+  if (!user) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 8 }}>
+        <Card sx={{ bgcolor: cardBg, color: textLight, p: 4, textAlign: 'center' }}>
+          <Typography variant="h5" sx={{ color: accent, mb: 2 }}>
+            Войдите, чтобы выполнять задания
+          </Typography>
+          <Button href="/login" variant="contained" color="primary">
+            Войти
+          </Button>
+        </Card>
+      </Container>
+    );
+  }
 
   return (
     <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 4 }}>
@@ -113,7 +153,7 @@ const Tasks = () => {
         </Fade>
         <Grid container spacing={4}>
           {tasks.map((task, index) => {
-            const isCompleted = completedTasks.includes(task.id);
+            const isCompleted = user.completedTasks.includes(task.id);
             return (
               <Grid item xs={12} sm={6} md={4} key={task.id}>
                 <Zoom in timeout={300} style={{ transitionDelay: `${index * 100}ms` }}>
@@ -280,24 +320,42 @@ const Tasks = () => {
           )}
         </Dialog>
 
+        <Box sx={{ mt: 6, textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ color: accent, mb: 2, fontWeight: 'bold' }}>
+            Ваши достижения
+          </Typography>
+          {user.achievements && user.achievements.length > 0 ? (
+            user.achievements.map((ach, idx) => (
+              <Chip
+                key={ach}
+                icon={<EmojiEventsIcon />}
+                label={ach === 'first-task' ? 'Первое задание!' : ach}
+                sx={{ bgcolor: accent2, color: textLight, fontWeight: 'bold', fontSize: '1rem', m: 1 }}
+              />
+            ))
+          ) : (
+            <Chip label="Нет достижений" />
+          )}
+        </Box>
+
         <Snackbar
-          open={openSnackbar}
-          autoHideDuration={6000}
+          open={snackbar.open}
+          autoHideDuration={4000}
           onClose={handleCloseSnackbar}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
           <Alert 
             onClose={handleCloseSnackbar} 
-            severity={snackbarSeverity} 
+            severity={snackbar.type} 
             sx={{ 
               width: '100%', 
-              bgcolor: snackbarSeverity === 'success' ? accent : accent2,
+              bgcolor: snackbar.type === 'success' ? accent : accent2,
               color: textLight,
               '& .MuiAlert-icon': { color: textLight }
             }}
           >
             <CheckCircleOutlineIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-            {snackbarMessage}
+            {snackbar.message}
           </Alert>
         </Snackbar>
       </Container>

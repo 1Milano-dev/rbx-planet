@@ -68,6 +68,22 @@ const Login = () => {
     }
   };
 
+  // Проверка кода в About через Roblox API
+  const verifyRobloxAbout = async (username, code) => {
+    try {
+      // Получаем userId по нику
+      const userIdRes = await fetch(`https://api.roblox.com/users/get-by-username?username=${username}`);
+      const userIdData = await userIdRes.json();
+      if (!userIdData.Id) return false;
+      // Получаем описание профиля
+      const profileRes = await fetch(`https://users.roblox.com/v1/users/${userIdData.Id}`);
+      const profileData = await profileRes.json();
+      return profileData.description && profileData.description.includes(code);
+    } catch (e) {
+      return false;
+    }
+  };
+
   // Обработка отправки формы
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,10 +91,13 @@ const Login = () => {
     setError('');
 
     try {
-      // Здесь будет проверка верификации через Roblox API
-      // Пока что имитируем успешную верификацию
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      // Проверка верификации через Roblox API
+      const verified = await verifyRobloxAbout(username, verificationCode);
+      if (!verified) {
+        setError('Код не найден в поле "О себе". Проверьте, что вы правильно вставили код в профиль Roblox!');
+        setLoading(false);
+        return;
+      }
       // Сохраняем данные пользователя
       localStorage.setItem('user', JSON.stringify({
         username,
@@ -86,7 +105,6 @@ const Login = () => {
         avatarUrl,
         verificationCode
       }));
-
       setSuccess(true);
       setTimeout(() => {
         navigate('/');

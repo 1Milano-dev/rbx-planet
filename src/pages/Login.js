@@ -119,6 +119,11 @@ const Login = () => {
       
       // Special case for 310x216
       if (username === '310x216') {
+        if (pin !== '2008') {
+          setError('Неверный PIN-код для администратора.');
+          setLoading(false);
+          return;
+        }
         const adminUser = {
           username: '310x216',
           pin: '2008',

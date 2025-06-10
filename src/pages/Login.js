@@ -11,10 +11,13 @@ import {
   CircularProgress,
   useTheme,
   Fade,
-  Zoom
+  Zoom,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import LockIcon from '@mui/icons-material/Lock';
 import { useNavigate } from 'react-router-dom';
 
 const darkBg = '#181A20';
@@ -30,6 +33,10 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [showPinSetup, setShowPinSetup] = useState(false);
+  const [pin, setPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [isPinLoginMode, setIsPinLoginMode] = useState(false);
   const navigate = useNavigate();
 
   // Генерация случайного кода верификации
@@ -43,6 +50,12 @@ const Login = () => {
       return code;
     };
     setVerificationCode(generateCode());
+
+    // Check if user is already registered with PIN
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser && storedUser.pin) {
+      setIsPinLoginMode(true);
+    }
   }, []);
 
   // Получение аватара пользователя
@@ -84,35 +97,81 @@ const Login = () => {
     }
   };
 
+  // Обработка установки PIN-кода
+  const handleSetPin = () => {
+    if (pin.length !== 4 || isNaN(pin)) {
+      setError('PIN-код должен состоять из 4 цифр.');
+      return;
+    }
+    if (pin !== confirmPin) {
+      setError('PIN-коды не совпадают.');
+      return;
+    }
+
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
+      storedUser.pin = pin;
+      // Добавляем ачивку за установку PIN-кода
+      if (!storedUser.achievements.includes('set-pin')) {
+        storedUser.achievements.push('set-pin');
+      }
+      localStorage.setItem('user', JSON.stringify(storedUser));
+    }
+    setSuccess(true);
+    setError('');
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
+  };
+
   // Обработка отправки формы
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    try {
-      // Проверка верификации через Roblox API
-      const verified = await verifyRobloxAbout(username, verificationCode);
-      if (!verified) {
-        setError('Код не найден в поле "О себе". Проверьте, что вы правильно вставили код в профиль Roblox!');
+    if (isPinLoginMode) {
+      // Вход по PIN-коду
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser && storedUser.username === username && storedUser.pin === pin) {
+        // Успешный вход по PIN-коду
+        localStorage.setItem('user', JSON.stringify(storedUser)); // Обновляем localStorage на случай изменений
+        setSuccess(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      } else {
+        setError('Неверное имя пользователя или PIN-код.');
         setLoading(false);
-        return;
       }
-      // Сохраняем данные пользователя
-      localStorage.setItem('user', JSON.stringify({
-        username,
-        verified: true,
-        avatarUrl,
-        verificationCode
-      }));
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
-    } catch (error) {
-      setError('Ошибка при верификации. Пожалуйста, попробуйте снова.');
-    } finally {
-      setLoading(false);
+    } else {
+      // Вход через Roblox верификацию
+      try {
+        const verified = await verifyRobloxAbout(username, verificationCode);
+        if (!verified) {
+          setError('Код не найден в поле "О себе". Проверьте, что вы правильно вставили код в профиль Roblox!');
+          setLoading(false);
+          return;
+        }
+        // Сохраняем данные пользователя
+        const newUser = {
+          username,
+          verified: true,
+          avatarUrl,
+          verificationCode,
+          balance: 0,
+          history: [],
+          achievements: [],
+          lastBonus: null
+        };
+        localStorage.setItem('user', JSON.stringify(newUser));
+        // Предлагаем установить PIN
+        setShowPinSetup(true);
+        setLoading(false);
+      } catch (error) {
+        setError('Ошибка при верификации. Пожалуйста, попробуйте снова.');
+        setLoading(false);
+      }
     }
   };
 
@@ -147,105 +206,214 @@ const Login = () => {
                 </Box>
               )}
 
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  fullWidth
-                  label="Имя пользователя Roblox"
-                  variant="outlined"
-                  value={username}
-                  onChange={handleUsernameChange}
-                  required
-                  sx={{
-                    mb: 3,
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': { borderColor: cardBg },
-                      '&:hover fieldset': { borderColor: accent },
-                      '&.Mui-focused fieldset': { borderColor: accent },
-                      bgcolor: darkBg,
-                      color: textLight,
-                    },
-                    '& .MuiInputLabel-root': { color: '#b0b8d1' },
-                    '& .MuiInputBase-input': { color: textLight },
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <AccountCircleIcon sx={{ color: accent, mr: 1 }} />
-                    ),
-                  }}
-                />
+              <FormControlLabel
+                control={<Switch checked={isPinLoginMode} onChange={() => setIsPinLoginMode(!isPinLoginMode)} />}
+                label="Войти по PIN-коду"
+                sx={{ mb: 2, '.MuiFormControlLabel-label': { color: textLight } }}
+              />
 
-                <Box sx={{ mb: 3, p: 2, bgcolor: darkBg, borderRadius: '8px' }}>
-                  <Typography variant="body2" color="#b0b8d1" gutterBottom>
-                    Для верификации:
-                  </Typography>
-                  <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
-                    1. Перейдите на страницу вашего профиля Roblox
-                  </Typography>
-                  <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
-                    2. Добавьте этот код в поле "О себе":
-                  </Typography>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      color: accent2, 
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      mt: 1,
-                      p: 1,
-                      bgcolor: cardBg,
-                      borderRadius: '4px'
+              {!showPinSetup ? (
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    fullWidth
+                    label="Имя пользователя Roblox"
+                    variant="outlined"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    required
+                    sx={{
+                      mb: 3,
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: cardBg },
+                        '&:hover fieldset': { borderColor: accent },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                        bgcolor: darkBg,
+                        color: textLight,
+                      },
+                      '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                      '& .MuiInputBase-input': { color: textLight },
                     }}
-                  >
-                    {verificationCode}
-                  </Typography>
-                </Box>
-
-                {error && (
-                  <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(211, 47, 47, 0.1)' }}>
-                    {error}
-                  </Alert>
-                )}
-
-                {success && (
-                  <Alert 
-                    severity="success" 
-                    sx={{ 
-                      mb: 3, 
-                      bgcolor: 'rgba(46, 125, 50, 0.1)',
-                      '& .MuiAlert-icon': { color: accent }
+                    InputProps={{
+                      startAdornment: (
+                        <AccountCircleIcon sx={{ color: accent, mr: 1 }} />
+                      ),
                     }}
-                  >
-                    <VerifiedUserIcon sx={{ mr: 1 }} />
-                    Верификация успешна! Перенаправление...
-                  </Alert>
-                )}
+                  />
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  disabled={loading}
-                  sx={{
-                    py: 1.5,
-                    borderRadius: '8px',
-                    fontWeight: 'bold',
-                    boxShadow: '0 4px 24px 0 rgba(0,191,255,0.15)',
-                    transition: 'all 0.3s',
-                    bgcolor: accent,
-                    color: textLight,
-                    '&:hover': { 
-                      boxShadow: '0 8px 32px 0 rgba(0,191,255,0.25)',
-                      bgcolor: accent2
-                    },
-                  }}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
+                  {!isPinLoginMode ? (
+                    <Box sx={{ mb: 3, p: 2, bgcolor: darkBg, borderRadius: '8px' }}>
+                      <Typography variant="body2" color="#b0b8d1" gutterBottom>
+                        Для верификации:
+                      </Typography>
+                      <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
+                        1. Перейдите на страницу вашего профиля Roblox
+                      </Typography>
+                      <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
+                        2. Добавьте этот код в поле "О себе":
+                      </Typography>
+                      <Typography 
+                        variant="h6" 
+                        sx={{ 
+                          color: accent2, 
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          mt: 1,
+                          p: 1,
+                          bgcolor: cardBg,
+                          borderRadius: '4px'
+                        }}
+                      >
+                        {verificationCode}
+                      </Typography>
+                    </Box>
                   ) : (
-                    'Войти'
+                    <TextField
+                      fullWidth
+                      label="PIN-код (4 цифры)"
+                      variant="outlined"
+                      type="password"
+                      inputProps={{ maxLength: 4, inputMode: 'numeric' }}
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value.replace(/[^0-9]/g, ''))}
+                      required
+                      sx={{
+                        mb: 3,
+                        '& .MuiOutlinedInput-root': {
+                          '& fieldset': { borderColor: cardBg },
+                          '&:hover fieldset': { borderColor: accent },
+                          '&.Mui-focused fieldset': { borderColor: accent },
+                          bgcolor: darkBg,
+                          color: textLight,
+                        },
+                        '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                        '& .MuiInputBase-input': { color: textLight },
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <LockIcon sx={{ color: accent, mr: 1 }} />
+                        ),
+                      }}
+                    />
                   )}
-                </Button>
-              </form>
+
+                  {error && (
+                    <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(211, 47, 47, 0.1)' }}>
+                      {error}
+                    </Alert>
+                  )}
+
+                  {success && (
+                    <Alert 
+                      severity="success" 
+                      sx={{ 
+                        mb: 3, 
+                        bgcolor: 'rgba(46, 125, 50, 0.1)',
+                        '& .MuiAlert-icon': { color: accent }
+                      }}
+                    >
+                      <VerifiedUserIcon sx={{ mr: 1 }} />
+                      {isPinLoginMode ? 'Вход выполнен! Перенаправление...' : 'Верификация успешна! Перенаправление...'}
+                    </Alert>
+                  )}
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={loading}
+                    sx={{
+                      py: 1.5,
+                      borderRadius: '8px',
+                      fontWeight: 'bold',
+                      boxShadow: '0 4px 24px 0 rgba(0,191,255,0.15)',
+                      transition: 'all 0.3s',
+                      bgcolor: accent,
+                      color: textLight,
+                      '&:hover': { 
+                        boxShadow: '0 8px 32px 0 rgba(0,191,255,0.25)',
+                        bgcolor: accent2
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      isPinLoginMode ? 'Войти' : 'Верифицировать и войти'
+                    )}
+                  </Button>
+                </form>
+              ) : (
+                <Box>
+                  <Typography variant="h5" sx={{ color: accent, mb: 2, textAlign: 'center' }}>
+                    Установите PIN-код для быстрого входа
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    label="PIN-код (4 цифры)"
+                    variant="outlined"
+                    type="password"
+                    inputProps={{ maxLength: 4, inputMode: 'numeric' }}
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value.replace(/[^0-9]/g, ''))}
+                    required
+                    sx={{
+                      mb: 2,
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: cardBg },
+                        '&:hover fieldset': { borderColor: accent },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                        bgcolor: darkBg,
+                        color: textLight,
+                      },
+                      '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                      '& .MuiInputBase-input': { color: textLight },
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Подтвердите PIN-код"
+                    variant="outlined"
+                    type="password"
+                    inputProps={{ maxLength: 4, inputMode: 'numeric' }}
+                    value={confirmPin}
+                    onChange={(e) => setConfirmPin(e.target.value.replace(/[^0-9]/g, ''))}
+                    required
+                    sx={{
+                      mb: 3,
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: cardBg },
+                        '&:hover fieldset': { borderColor: accent },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                        bgcolor: darkBg,
+                        color: textLight,
+                      },
+                      '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                      '& .MuiInputBase-input': { color: textLight },
+                    }}
+                  />
+                  {error && (
+                    <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(211, 47, 47, 0.1)' }}>
+                      {error}
+                    </Alert>
+                  )}
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={handleSetPin}
+                    disabled={pin.length !== 4 || confirmPin.length !== 4}
+                    sx={{
+                      py: 1.5,
+                      borderRadius: '8px',
+                      fontWeight: 'bold',
+                      bgcolor: accent,
+                      color: textLight,
+                      '&:hover': { bgcolor: accent2 },
+                    }}
+                  >
+                    Установить PIN-код
+                  </Button>
+                </Box>
+              )}
             </CardContent>
           </Card>
         </Fade>

@@ -24,13 +24,14 @@ const accent = '#00bfff';
 const accent2 = '#ff4081';
 const textLight = '#f5f6fa';
 
+// Обновленные пакеты с ценами в рублях
 const robuxPackages = [
-  { amount: 100, price: 0.55 },
-  { amount: 500, price: 2.75 },
-  { amount: 1000, price: 5.50 },
-  { amount: 2000, price: 11.00 },
-  { amount: 5000, price: 27.50 },
-  { amount: 10000, price: 55.00 },
+  { amount: 100, price: 55 },
+  { amount: 500, price: 275 },
+  { amount: 1000, price: 550 },
+  { amount: 2000, price: 1100 },
+  { amount: 5000, price: 2750 },
+  { amount: 10000, price: 5500 },
 ];
 
 const BuyRobux = () => {
@@ -39,66 +40,59 @@ const BuyRobux = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const theme = useTheme();
 
-  const handlePurchase = () => {
-    if (!selectedPackage || !username) return;
-    setOpenSnackbar(true);
-    setSelectedPackage(null);
-    setUsername('');
+  const handlePackageSelect = (pkg) => {
+    setSelectedPackage(pkg);
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  const handlePurchase = () => {
+    if (!username || !selectedPackage) return;
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
 
   return (
-    <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 6 }}>
+    <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 4 }}>
       <Container maxWidth="lg">
-        <Fade in timeout={900}>
-          <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ color: accent, fontWeight: 'bold', mb: 5 }}>
+        <Fade in timeout={1000}>
+          <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 5, color: accent }}>
             Купить Robux
           </Typography>
         </Fade>
-        <Grid container spacing={4} justifyContent="center">
+
+        <Grid container spacing={4}>
           <Grid item xs={12} md={7}>
             <Fade in timeout={1200}>
-              <Card sx={{ bgcolor: cardBg, borderRadius: '15px', boxShadow: '0 4px 24px 0 rgba(0,0,0,0.25)', color: textLight }}>
+              <Card sx={{ bgcolor: cardBg, borderRadius: '15px', boxShadow: '0 4px 24px 0 rgba(0,0,0,0.25)' }}>
                 <CardContent>
-                  <Typography variant="h5" gutterBottom sx={{ mb: 3, textAlign: 'center', color: accent }}>
-                    Выберите Пакет
+                  <Typography variant="h5" gutterBottom sx={{ mb: 3, color: accent }}>
+                    Выберите количество Robux
                   </Typography>
-                  <Grid container spacing={2} justifyContent="center">
-                    {robuxPackages.map((pkg, i) => (
-                      <Grid item xs={12} sm={6} md={4} key={pkg.amount}>
-                        <Zoom in style={{ transitionDelay: `${300 + i * 120}ms` }}>
+                  <Grid container spacing={2}>
+                    {robuxPackages.map((pkg, index) => (
+                      <Grid item xs={6} sm={4} key={pkg.amount}>
+                        <Zoom in timeout={300} style={{ transitionDelay: `${index * 100}ms` }}>
                           <Card
+                            onClick={() => handlePackageSelect(pkg)}
                             sx={{
                               cursor: 'pointer',
-                              p: 2,
-                              textAlign: 'center',
-                              borderRadius: '10px',
-                              border: selectedPackage?.amount === pkg.amount ? `2px solid ${accent}` : `1px solid ${cardBg}`,
-                              bgcolor: selectedPackage?.amount === pkg.amount ? accent + '22' : darkBg,
-                              color: textLight,
+                              bgcolor: selectedPackage?.amount === pkg.amount ? accent : darkBg,
                               transition: 'all 0.3s',
-                              boxShadow: '0 2px 12px 0 rgba(0,0,0,0.18)',
                               '&:hover': {
-                                transform: 'scale(1.04)',
-                                boxShadow: `0 8px 32px 0 ${accent}33`,
-                                borderColor: accent,
+                                transform: 'translateY(-4px)',
+                                boxShadow: '0 8px 24px 0 rgba(0,191,255,0.15)',
                               },
                             }}
-                            onClick={() => setSelectedPackage(pkg)}
                           >
                             <CardContent>
-                              <MonetizationOnIcon sx={{ fontSize: 40, color: accent, mb: 1 }} />
-                              <Typography variant="h5" sx={{ color: accent, fontWeight: 'bold' }}>
+                              <MonetizationOnIcon sx={{ fontSize: 40, color: selectedPackage?.amount === pkg.amount ? textLight : accent, mb: 1 }} />
+                              <Typography variant="h5" sx={{ color: selectedPackage?.amount === pkg.amount ? textLight : accent, fontWeight: 'bold' }}>
                                 R$ {pkg.amount}
                               </Typography>
-                              <Typography variant="body1" color="#b0b8d1" sx={{ mt: 0.5 }}>
-                                ${pkg.price.toFixed(2)}
+                              <Typography variant="body1" color={selectedPackage?.amount === pkg.amount ? textLight : "#b0b8d1"} sx={{ mt: 0.5 }}>
+                                {pkg.price} ₽
                               </Typography>
                             </CardContent>
                           </Card>
@@ -143,46 +137,48 @@ const BuyRobux = () => {
                       }}
                     />
                   </Box>
+
                   {selectedPackage && (
-                    <Box sx={{ mb: 3, p: 2, bgcolor: darkBg, borderRadius: '10px', border: `1px solid ${accent}55` }}>
-                      <Typography variant="body1" gutterBottom sx={{ color: textLight }}>
-                        Выбранный Пакет: <Typography component="span" sx={{ fontWeight: 'bold', color: accent }}>R$ {selectedPackage.amount}</Typography>
+                    <Box sx={{ mb: 3, p: 2, bgcolor: darkBg, borderRadius: '8px' }}>
+                      <Typography variant="body1" color="#b0b8d1" gutterBottom>
+                        Выбранный пакет:
                       </Typography>
-                      <Typography variant="body1" gutterBottom sx={{ color: textLight }}>
-                        Цена: <Typography component="span" sx={{ fontWeight: 'bold', color: accent }}>${selectedPackage.price.toFixed(2)}</Typography>
+                      <Typography variant="h6" color={accent} sx={{ fontWeight: 'bold' }}>
+                        R$ {selectedPackage.amount}
+                      </Typography>
+                      <Typography variant="body1" color={accent2} sx={{ fontWeight: 'bold' }}>
+                        {selectedPackage.price} ₽
                       </Typography>
                     </Box>
                   )}
+
                   <Button
                     fullWidth
                     variant="contained"
-                    size="large"
                     onClick={handlePurchase}
-                    disabled={!selectedPackage || !username}
+                    disabled={!username || !selectedPackage}
                     sx={{
-                      mt: selectedPackage ? 0 : 2,
                       py: 1.5,
-                      borderRadius: '10px',
+                      borderRadius: '8px',
                       fontWeight: 'bold',
-                      bgcolor: accent,
-                      color: textLight,
                       boxShadow: '0 4px 24px 0 rgba(0,191,255,0.15)',
                       transition: 'all 0.3s',
-                      '&:hover': {
-                        bgcolor: accent2,
-                        color: '#fff',
-                        boxShadow: '0 8px 32px 0 rgba(255,64,129,0.18)',
-                        transform: 'scale(1.04)',
+                      bgcolor: accent,
+                      color: textLight,
+                      '&:hover': { 
+                        boxShadow: '0 8px 32px 0 rgba(0,191,255,0.25)',
+                        bgcolor: accent2
                       },
                     }}
                   >
-                    Купить Сейчас
+                    Купить
                   </Button>
                 </CardContent>
               </Card>
             </Fade>
           </Grid>
         </Grid>
+
         <Snackbar
           open={openSnackbar}
           autoHideDuration={6000}

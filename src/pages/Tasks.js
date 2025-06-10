@@ -7,7 +7,6 @@ import {
   CardContent,
   Button,
   Box,
-  LinearProgress,
   Alert,
   Dialog,
   DialogTitle,
@@ -22,7 +21,6 @@ import {
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import ForumIcon from '@mui/icons-material/Forum';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const darkBg = '#181A20';
@@ -101,27 +99,24 @@ const Tasks = () => {
     setOpenDialog(false);
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
 
   return (
-    <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 6 }}>
+    <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 4 }}>
       <Container maxWidth="lg">
-        <Fade in timeout={900}>
-          <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ color: accent, fontWeight: 'bold', mb: 5 }}>
+        <Fade in timeout={1000}>
+          <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 5, color: accent }}>
             Задания для получения Robux
           </Typography>
         </Fade>
-        <Grid container spacing={4} justifyContent="center">
-          {tasks.map((task, i) => {
+        <Grid container spacing={4}>
+          {tasks.map((task, index) => {
             const isCompleted = completedTasks.includes(task.id);
             return (
               <Grid item xs={12} sm={6} md={4} key={task.id}>
-                <Zoom in style={{ transitionDelay: `${300 + i * 120}ms` }}>
+                <Zoom in timeout={300} style={{ transitionDelay: `${index * 100}ms` }}>
                   <Card
                     sx={{
                       height: '100%',
@@ -134,11 +129,9 @@ const Tasks = () => {
                       border: isCompleted ? `2px solid ${accent}` : `1px solid ${cardBg}`,
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'space-between',
                       '&:hover': {
-                        boxShadow: `0 8px 32px 0 ${accent}55`,
-                        transform: isCompleted ? 'none' : 'translateY(-7px) scale(1.03)',
-                        border: `2px solid ${accent}`,
+                        transform: isCompleted ? 'none' : 'translateY(-4px)',
+                        boxShadow: '0 8px 32px 0 rgba(0,191,255,0.15)',
                       },
                     }}
                   >
@@ -175,9 +168,7 @@ const Tasks = () => {
                         transition: 'all 0.3s',
                         '&:hover': {
                           bgcolor: accent2,
-                          color: '#fff',
                           boxShadow: '0 8px 32px 0 rgba(255,64,129,0.18)',
-                          transform: 'scale(1.04)',
                         },
                       }}
                     >
@@ -189,6 +180,7 @@ const Tasks = () => {
             );
           })}
         </Grid>
+
         <Dialog
           open={openDialog}
           onClose={() => setOpenDialog(false)}
@@ -224,7 +216,10 @@ const Tasks = () => {
                         transition: 'all 0.3s',
                         bgcolor: accent2,
                         color: textLight,
-                        '&:hover': { boxShadow: '0 8px 32px 0 rgba(255,64,129,0.18)', bgcolor: accent, color: '#fff' },
+                        '&:hover': { 
+                          boxShadow: '0 8px 32px 0 rgba(255,64,129,0.18)', 
+                          bgcolor: accent 
+                        },
                       }}
                     >
                       {selectedTask.type === 'youtube' && 'Перейти на YouTube'}
@@ -232,7 +227,7 @@ const Tasks = () => {
                   </Box>
                 )}
                 {selectedTask.type === 'referral' && (
-                  <Alert severity="info" sx={{ mt: 2, bgcolor: cardBg, color: textLight, border: `1px solid ${accent}` }}>
+                  <Alert severity="info" sx={{ mt: 2, bgcolor: darkBg, color: textLight, border: `1px solid ${accent}` }}>
                     Для этого задания вам нужно пригласить друга по вашей реферальной ссылке.
                     (Эта функция пока не реализована, это пример.)
                   </Alert>
@@ -244,29 +239,65 @@ const Tasks = () => {
                     rows={4}
                     label="Ваш отзыв"
                     variant="outlined"
-                    sx={{ mt: 2, bgcolor: darkBg, color: textLight, '& .MuiInputBase-input': { color: textLight } }}
+                    sx={{ 
+                      mt: 2,
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: cardBg },
+                        '&:hover fieldset': { borderColor: accent },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                        bgcolor: darkBg,
+                        color: textLight,
+                      },
+                      '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                      '& .MuiInputBase-input': { color: textLight },
+                    }}
                   />
                 )}
               </DialogContent>
-              <DialogActions sx={{ p: 2, bgcolor: darkBg }}>
-                <Button onClick={() => setOpenDialog(false)} sx={{ color: '#b0b8d1' }}>
+              <DialogActions sx={{ p: 2, bgcolor: cardBg }}>
+                <Button 
+                  onClick={() => setOpenDialog(false)}
+                  sx={{ 
+                    color: textLight,
+                    '&:hover': { color: accent }
+                  }}
+                >
                   Отмена
                 </Button>
-                <Button onClick={handleCompleteTask} variant="contained" sx={{ fontWeight: 'bold', bgcolor: accent, color: textLight, '&:hover': { bgcolor: accent2, color: '#fff' } }}>
-                  Подтвердить Выполнение
+                <Button 
+                  onClick={handleCompleteTask}
+                  variant="contained"
+                  sx={{
+                    bgcolor: accent,
+                    color: textLight,
+                    '&:hover': { bgcolor: accent2 },
+                  }}
+                >
+                  Выполнить
                 </Button>
               </DialogActions>
             </>
           )}
         </Dialog>
+
         <Snackbar
           open={openSnackbar}
           autoHideDuration={6000}
           onClose={handleCloseSnackbar}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%', bgcolor: accent, color: textLight }}>
-            <CheckCircleOutlineIcon sx={{ mr: 1, verticalAlign: 'middle' }} /> {snackbarMessage}
+          <Alert 
+            onClose={handleCloseSnackbar} 
+            severity={snackbarSeverity} 
+            sx={{ 
+              width: '100%', 
+              bgcolor: snackbarSeverity === 'success' ? accent : accent2,
+              color: textLight,
+              '& .MuiAlert-icon': { color: textLight }
+            }}
+          >
+            <CheckCircleOutlineIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+            {snackbarMessage}
           </Alert>
         </Snackbar>
       </Container>

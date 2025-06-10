@@ -10,7 +10,8 @@ import {
   Snackbar,
   useTheme,
   Fade,
-  Alert
+  Alert,
+  Link
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -19,7 +20,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import Link from '@mui/material/Link';
 
 const darkBg = '#181A20';
 const cardBg = '#23263a';
@@ -50,7 +50,7 @@ const BuyRobux = () => {
   // DonationAlerts ссылка (замените на свой ник)
   const donationAlertsNick = 'rbxplanet';
   const amount = parseInt(robuxAmount) || 0;
-  const donationUrl = `https://www.donationalerts.com/r/${donationAlertsNick}?amount=${amount}&message=Roblox:${username}`;
+  const donationUrl = `https://www.donationalerts.com/r/rbxplanet`;
 
   return (
     <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 4 }}>
@@ -187,25 +187,32 @@ const BuyRobux = () => {
           <DialogTitle sx={{ bgcolor: cardBg, color: accent, fontWeight: 'bold' }}>Что делать после оплаты?</DialogTitle>
           <DialogContent sx={{ bgcolor: darkBg, color: textLight }}>
             <Typography variant="body1" sx={{ mb: 2 }}>
-              <b>Спасибо за оплату!</b> Чтобы получить Robux:
+              <b>Спасибо за оплату!</b> Чтобы получить Robux, выберите удобный способ:
             </Typography>
-            <ol style={{ color: textLight, marginLeft: 16 }}>
-              <li>Скопируйте ваш ник Roblox и сумму оплаты.</li>
-              <li>Отправьте эти данные в наш Telegram:
-                <br/>
-                <Link href="https://t.me/ThisGuyTom" target="_blank" rel="noopener" sx={{ color: accent2, fontWeight: 'bold' }}>@ThisGuyTom</Link>
-              </li>
-              <li>В сообщении укажите:
-                <ul>
-                  <li>Ваш ник Roblox</li>
-                  <li>Сумму оплаты</li>
-                  <li>Комментарий к платежу (если был)</li>
-                  <li>Скриншот или ID платежа (по возможности)</li>
-                </ul>
-              </li>
-            </ol>
+            <Box sx={{ mb: 2, p: 2, bgcolor: cardBg, borderRadius: '8px' }}>
+              <Typography variant="subtitle1" sx={{ color: accent, fontWeight: 'bold' }}>1. Через группу Roblox</Typography>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                Вступите в нашу группу: <Link href="https://www.roblox.com/groups/" target="_blank" rel="noopener" sx={{ color: accent2, fontWeight: 'bold' }}>[ссылка на группу]</Link><br/>
+                После вступления сообщите свой ник и ожидайте выплату (Roblox может задерживать выплаты новым участникам до 14 дней).
+              </Typography>
+            </Box>
+            <Box sx={{ mb: 2, p: 2, bgcolor: cardBg, borderRadius: '8px' }}>
+              <Typography variant="subtitle1" sx={{ color: accent, fontWeight: 'bold' }}>2. Через геймпасс</Typography>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                Создайте геймпасс на нужную сумму и отправьте ссылку на него.<br/>
+                <Link href="https://youtu.be/7RzVnF8b5yA" target="_blank" rel="noopener" sx={{ color: accent2 }}>Как создать геймпасс (видео)</Link>
+              </Typography>
+            </Box>
+            <Box sx={{ mb: 2, p: 2, bgcolor: cardBg, borderRadius: '8px' }}>
+              <Typography variant="subtitle1" sx={{ color: accent, fontWeight: 'bold' }}>3. Через предмет (T-shirt/шорт)</Typography>
+              <Typography variant="body2" sx={{ mb: 1 }}>
+                Загрузите любой предмет (например, T-shirt) на нужную сумму и отправьте ссылку.<br/>
+                <Link href="https://youtu.be/7RzVnF8b5yA?t=120" target="_blank" rel="noopener" sx={{ color: accent2 }}>Как создать T-shirt (видео)</Link>
+              </Typography>
+            </Box>
             <Typography variant="body2" sx={{ mt: 2, color: accent }}>
-              Robux будут начислены в течение 24 часов после проверки!
+              Robux будут начислены в течение 24 часов после проверки!<br/>
+              Если возникли вопросы — пишите <Link href="https://t.me/ThisGuyTom" target="_blank" rel="noopener" sx={{ color: accent2, fontWeight: 'bold' }}>@ThisGuyTom</Link>
             </Typography>
           </DialogContent>
           <DialogActions sx={{ bgcolor: cardBg }}>

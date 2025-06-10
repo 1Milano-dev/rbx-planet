@@ -94,38 +94,24 @@ const Login = () => {
         return;
       }
 
-      try {
-        const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${username}`);
-        const data = await response.json();
-        if (!data.Id) {
-          setError('Roblox пользователь с таким ником не найден.');
-          setLoading(false);
-          return;
-        }
-        const newAvatarUrl = `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.Id}&size=150x150&format=Png&isCircular=true`;
+      const newUser = {
+        username,
+        pin,
+        avatarUrl: avatarUrl,
+        balance: 0,
+        history: [],
+        achievements: [],
+        isAdmin: false
+      };
+      allUsers.push(newUser);
+      localStorage.setItem('allUsers', JSON.stringify(allUsers));
+      localStorage.setItem('user', JSON.stringify(newUser));
 
-        const newUser = {
-          username,
-          pin,
-          avatarUrl: newAvatarUrl,
-          balance: 0,
-          history: [],
-          achievements: [],
-          isAdmin: false
-        };
-        allUsers.push(newUser);
-        localStorage.setItem('allUsers', JSON.stringify(allUsers));
-        localStorage.setItem('user', JSON.stringify(newUser));
-
-        setSuccess(true);
-        setError('');
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
-      } catch (err) {
-        setError('Ошибка при проверке Roblox ника. Пожалуйста, попробуйте еще раз.');
-        setLoading(false);
-      }
+      setSuccess(true);
+      setError('');
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
     } else {
       // Login logic
       const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');

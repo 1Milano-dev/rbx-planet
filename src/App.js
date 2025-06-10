@@ -8,6 +8,7 @@ import Tasks from './pages/Tasks';
 import BuyRobux from './pages/BuyRobux';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './pages/Profile';
 
 const darkTheme = createTheme({
   palette: {
@@ -63,6 +64,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </ThemeProvider>

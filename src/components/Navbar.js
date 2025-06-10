@@ -20,6 +20,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -78,6 +79,10 @@ const Navbar = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {user ? (
               <>
+                <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: theme.palette.background.default, borderRadius: 2, px: 2, py: 0.5, mr: 2 }}>
+                  <MonetizationOnIcon sx={{ color: theme.palette.primary.main, mr: 0.5 }} />
+                  <span style={{ color: theme.palette.text.primary, fontWeight: 700 }}>{user.balance || 0} R$</span>
+                </Box>
                 <Button
                   component={RouterLink}
                   to="/tasks"

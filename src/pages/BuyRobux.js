@@ -15,6 +15,11 @@ import {
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Link from '@mui/material/Link';
 
 const darkBg = '#181A20';
 const cardBg = '#23263a';
@@ -26,15 +31,20 @@ const BuyRobux = () => {
   const [robuxAmount, setRobuxAmount] = useState('');
   const [username, setUsername] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const theme = useTheme();
 
   const handlePurchase = () => {
     if (!username || !robuxAmount || isNaN(robuxAmount) || robuxAmount < 1) return;
-    setOpenSnackbar(true);
+    setOpenDialog(true);
   };
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   // DonationAlerts ссылка (замените на свой ник)
@@ -173,6 +183,35 @@ const BuyRobux = () => {
             <CheckCircleOutlineIcon sx={{ mr: 1, verticalAlign: 'middle' }} /> Заявка отправлена! Ожидайте начисления Robux.
           </Alert>
         </Snackbar>
+        <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
+          <DialogTitle sx={{ bgcolor: cardBg, color: accent, fontWeight: 'bold' }}>Что делать после оплаты?</DialogTitle>
+          <DialogContent sx={{ bgcolor: darkBg, color: textLight }}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              <b>Спасибо за оплату!</b> Чтобы получить Robux:
+            </Typography>
+            <ol style={{ color: textLight, marginLeft: 16 }}>
+              <li>Скопируйте ваш ник Roblox и сумму оплаты.</li>
+              <li>Отправьте эти данные в наш Telegram:
+                <br/>
+                <Link href="https://t.me/ThisGuyTom" target="_blank" rel="noopener" sx={{ color: accent2, fontWeight: 'bold' }}>@ThisGuyTom</Link>
+              </li>
+              <li>В сообщении укажите:
+                <ul>
+                  <li>Ваш ник Roblox</li>
+                  <li>Сумму оплаты</li>
+                  <li>Комментарий к платежу (если был)</li>
+                  <li>Скриншот или ID платежа (по возможности)</li>
+                </ul>
+              </li>
+            </ol>
+            <Typography variant="body2" sx={{ mt: 2, color: accent }}>
+              Robux будут начислены в течение 24 часов после проверки!
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ bgcolor: cardBg }}>
+            <Button onClick={handleCloseDialog} sx={{ color: accent }}>Понятно</Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );

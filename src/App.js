@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import FAQ from './pages/FAQ';
 import Feedback from './pages/Feedback';
 import Wheel from './pages/Wheel';
+import AdminPanel from './pages/AdminPanel';
 
 const darkTheme = createTheme({
   palette: {
@@ -71,6 +72,14 @@ function App() {
           <Route path="/faq" element={<FAQ />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/wheel" element={<Wheel />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </Router>
     </ThemeProvider>

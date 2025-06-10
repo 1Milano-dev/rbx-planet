@@ -24,6 +24,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import CasinoIcon from '@mui/icons-material/Casino';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import FeedbackIcon from '@mui/icons-material/Feedback';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -126,6 +127,16 @@ const Navbar = () => {
                 >
                   Купить R$
                 </Button>
+                {user.isAdmin && (
+                  <Button
+                    component={RouterLink}
+                    to="/admin"
+                    startIcon={<AdminPanelSettingsIcon />}
+                    color="primary"
+                  >
+                    Админ-панель
+                  </Button>
+                )}
                 <IconButton
                   onClick={handleMenu}
                   sx={{ ml: 1 }}

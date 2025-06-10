@@ -111,6 +111,7 @@ const Login = () => {
       setError('');
       setTimeout(() => {
         navigate('/');
+        window.location.reload();
       }, 1000);
     } else {
       // Login logic
@@ -142,6 +143,7 @@ const Login = () => {
         setError('');
         setTimeout(() => {
           navigate('/');
+          window.location.reload();
         }, 1000);
         return;
       }
@@ -154,6 +156,7 @@ const Login = () => {
         setError('');
         setTimeout(() => {
           navigate('/');
+          window.location.reload();
         }, 1000);
       } else {
         setError('Неверное имя пользователя или PIN-код.');

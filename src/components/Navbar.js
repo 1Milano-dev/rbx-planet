@@ -12,7 +12,8 @@ import {
   MenuItem,
   IconButton,
   useTheme,
-  Fade
+  Fade,
+  Divider
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -127,16 +128,6 @@ const Navbar = () => {
                 >
                   Купить R$
                 </Button>
-                {user.isAdmin && (
-                  <Button
-                    component={RouterLink}
-                    to="/admin"
-                    startIcon={<AdminPanelSettingsIcon />}
-                    color="primary"
-                  >
-                    Админ-панель
-                  </Button>
-                )}
                 <IconButton
                   onClick={handleMenu}
                   sx={{ ml: 1 }}
@@ -176,6 +167,26 @@ const Navbar = () => {
                     <AccountCircleIcon sx={{ mr: 1 }} />
                     Личный кабинет
                   </MenuItem>
+                  {user.isAdmin && (
+                    <>
+                      <Divider sx={{ my: 1 }} />
+                      <MenuItem 
+                        component={RouterLink} 
+                        to="/admin"
+                        onClick={handleClose}
+                        sx={{ 
+                          color: theme.palette.primary.main,
+                          '&:hover': {
+                            bgcolor: 'rgba(0, 191, 255, 0.08)'
+                          }
+                        }}
+                      >
+                        <AdminPanelSettingsIcon sx={{ mr: 1 }} />
+                        Админ-панель
+                      </MenuItem>
+                    </>
+                  )}
+                  <Divider sx={{ my: 1 }} />
                   <MenuItem 
                     component={RouterLink} 
                     to="/settings"

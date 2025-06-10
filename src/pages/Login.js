@@ -111,7 +111,7 @@ const Login = () => {
           balance: 0,
           history: [],
           achievements: [],
-          isAdmin: false // Default to false for new users
+          isAdmin: false
         };
         allUsers.push(newUser);
         localStorage.setItem('allUsers', JSON.stringify(allUsers));
@@ -126,19 +126,43 @@ const Login = () => {
         setError('Ошибка при проверке Roblox ника. Пожалуйста, попробуйте еще раз.');
         setLoading(false);
       }
-
     } else {
+      // Login logic
       const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
-      const foundUser = allUsers.find(u => u.username === username && u.pin === pin);
+      
+      // Special case for 310x216
+      if (username === '310x216') {
+        const adminUser = {
+          username: '310x216',
+          pin: '2008',
+          avatarUrl: 'https://thumbnails.roblox.com/v1/users/avatar?userIds=87948332&size=150x150&format=Png&isCircular=true',
+          balance: 0,
+          history: [],
+          achievements: [],
+          isAdmin: true
+        };
 
-      if (foundUser) {
-        // Set isAdmin to true for 310x216
-        if (foundUser.username === '310x216') {
-          foundUser.isAdmin = true;
-          // Update the user in allUsers array
-          const updatedUsers = allUsers.map(u => u.username === '310x216' ? foundUser : u);
-          localStorage.setItem('allUsers', JSON.stringify(updatedUsers));
+        // Check if admin user exists in allUsers
+        const existingAdminIndex = allUsers.findIndex(u => u.username === '310x216');
+        if (existingAdminIndex !== -1) {
+          allUsers[existingAdminIndex] = adminUser;
+        } else {
+          allUsers.push(adminUser);
         }
+        
+        localStorage.setItem('allUsers', JSON.stringify(allUsers));
+        localStorage.setItem('user', JSON.stringify(adminUser));
+        setSuccess(true);
+        setError('');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+        return;
+      }
+
+      // Regular user login
+      const foundUser = allUsers.find(u => u.username === username && u.pin === pin);
+      if (foundUser) {
         localStorage.setItem('user', JSON.stringify(foundUser));
         setSuccess(true);
         setError('');

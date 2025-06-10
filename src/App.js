@@ -1,51 +1,68 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import BuyRobux from './pages/BuyRobux';
-import BuyLimiteds from './pages/BuyLimiteds';
-import AddBalance from './pages/AddBalance';
-import Login from './pages/Login';
 import Tasks from './pages/Tasks';
+import BuyRobux from './pages/BuyRobux';
+import Login from './pages/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
-const theme = createTheme({
+const darkTheme = createTheme({
   palette: {
+    mode: 'dark',
     primary: {
-      main: '#00A2FF',
+      main: '#00bfff',
     },
     secondary: {
-      main: '#FF4D4D',
+      main: '#ff4081',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#181A20',
+      paper: '#23263a',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontWeight: 700,
-    },
-    h2: {
-      fontWeight: 600,
+    fontFamily: '"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: 8,
+        },
+      },
     },
   },
 });
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Router>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/buy-robux" element={<BuyRobux />} />
-          <Route path="/buy-limiteds" element={<BuyLimiteds />} />
-          <Route path="/add-balance" element={<AddBalance />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/tasks" element={<Tasks />} />
+          <Route 
+            path="/tasks" 
+            element={
+              <ProtectedRoute>
+                <Tasks />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/buy-robux" 
+            element={
+              <ProtectedRoute>
+                <BuyRobux />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </Router>
     </ThemeProvider>

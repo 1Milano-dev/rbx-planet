@@ -1,149 +1,238 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
-  Card,
-  CardContent,
   TextField,
   Button,
+  Card,
+  CardContent,
   Box,
   Alert,
-  Stepper,
-  Step,
-  StepLabel,
+  CircularProgress,
+  useTheme,
+  Fade,
+  Zoom
 } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import { useNavigate } from 'react-router-dom';
 
-const steps = ['Вход', 'Верификация', 'Подтверждение'];
+const darkBg = '#181A20';
+const cardBg = '#23263a';
+const accent = '#00bfff';
+const accent2 = '#ff4081';
+const textLight = '#f5f6fa';
 
 const Login = () => {
-  const [activeStep, setActiveStep] = useState(0);
   const [username, setUsername] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const navigate = useNavigate();
 
-  const generateVerificationCode = () => {
-    return `RobuxPlanet-${Math.random().toString(36).substr(2, 9)}`;
-  };
-
-  const handleNext = () => {
-    if (activeStep === 0) {
-      if (!username) {
-        setError('Пожалуйста, введите имя пользователя Roblox');
-        return;
+  // Генерация случайного кода верификации
+  useEffect(() => {
+    const generateCode = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = 'RP-VERIFY-';
+      for (let i = 0; i < 8; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
       }
-      const code = generateVerificationCode();
-      setVerificationCode(code);
-      setError('');
-      setSuccess(`Пожалуйста, добавьте следующий код в поле "About" вашего профиля Roblox: ${code}`);
-    } else if (activeStep === 1) {
-      // Здесь будет проверка кода через Roblox API
-      setSuccess('Верификация успешна! Перенаправление...');
+      return code;
+    };
+    setVerificationCode(generateCode());
+  }, []);
+
+  // Получение аватара пользователя
+  const fetchAvatar = async (username) => {
+    try {
+      const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${username}`);
+      const data = await response.json();
+      
+      if (data.Id) {
+        setAvatarUrl(`https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.Id}&size=150x150&format=Png&isCircular=true`);
+      }
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
     }
-    setActiveStep((prevStep) => prevStep + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
+  // Обработка изменения имени пользователя
+  const handleUsernameChange = (e) => {
+    const newUsername = e.target.value;
+    setUsername(newUsername);
+    if (newUsername.length > 3) {
+      fetchAvatar(newUsername);
+    }
+  };
+
+  // Обработка отправки формы
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      // Здесь будет проверка верификации через Roblox API
+      // Пока что имитируем успешную верификацию
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Сохраняем данные пользователя
+      localStorage.setItem('user', JSON.stringify({
+        username,
+        verified: true,
+        avatarUrl,
+        verificationCode
+      }));
+
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    } catch (error) {
+      setError('Ошибка при верификации. Пожалуйста, попробуйте снова.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 4 }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h4" component="h1" gutterBottom align="center">
-            Вход в RobuxPlanet
-          </Typography>
-
-          <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-
-          {success && (
-            <Alert severity="success" sx={{ mb: 2 }}>
-              {success}
-            </Alert>
-          )}
-
-          <Box sx={{ mt: 2 }}>
-            {activeStep === 0 && (
-              <TextField
-                fullWidth
-                label="Имя пользователя Roblox"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                margin="normal"
-              />
-            )}
-
-            {activeStep === 1 && (
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="body1" gutterBottom>
-                  Шаг 1: Скопируйте этот код:
+    <Box sx={{ bgcolor: darkBg, minHeight: '100vh', color: textLight, py: 4 }}>
+      <Container maxWidth="sm">
+        <Fade in timeout={1000}>
+          <Card sx={{ bgcolor: cardBg, borderRadius: '15px', boxShadow: '0 4px 24px 0 rgba(0,0,0,0.25)' }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ textAlign: 'center', mb: 4 }}>
+                <Typography variant="h4" component="h1" gutterBottom sx={{ color: accent, fontWeight: 'bold' }}>
+                  Вход через Roblox
                 </Typography>
-                <Typography
-                  variant="h6"
+                <Typography variant="body1" color="#b0b8d1">
+                  Войдите, чтобы получить доступ ко всем функциям
+                </Typography>
+              </Box>
+
+              {avatarUrl && (
+                <Box sx={{ textAlign: 'center', mb: 3 }}>
+                  <img 
+                    src={avatarUrl} 
+                    alt="Roblox Avatar" 
+                    style={{ 
+                      width: 100, 
+                      height: 100, 
+                      borderRadius: '50%',
+                      border: `3px solid ${accent}`,
+                      boxShadow: `0 0 20px ${accent}40`
+                    }} 
+                  />
+                </Box>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  fullWidth
+                  label="Имя пользователя Roblox"
+                  variant="outlined"
+                  value={username}
+                  onChange={handleUsernameChange}
+                  required
                   sx={{
-                    bgcolor: 'grey.100',
-                    p: 2,
-                    borderRadius: 1,
-                    mb: 2,
+                    mb: 3,
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': { borderColor: cardBg },
+                      '&:hover fieldset': { borderColor: accent },
+                      '&.Mui-focused fieldset': { borderColor: accent },
+                      bgcolor: darkBg,
+                      color: textLight,
+                    },
+                    '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                    '& .MuiInputBase-input': { color: textLight },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <AccountCircleIcon sx={{ color: accent, mr: 1 }} />
+                    ),
+                  }}
+                />
+
+                <Box sx={{ mb: 3, p: 2, bgcolor: darkBg, borderRadius: '8px' }}>
+                  <Typography variant="body2" color="#b0b8d1" gutterBottom>
+                    Для верификации:
+                  </Typography>
+                  <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
+                    1. Перейдите на страницу вашего профиля Roblox
+                  </Typography>
+                  <Typography variant="body2" color={accent} sx={{ fontWeight: 'bold' }}>
+                    2. Добавьте этот код в поле "О себе":
+                  </Typography>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      color: accent2, 
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      mt: 1,
+                      p: 1,
+                      bgcolor: cardBg,
+                      borderRadius: '4px'
+                    }}
+                  >
+                    {verificationCode}
+                  </Typography>
+                </Box>
+
+                {error && (
+                  <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(211, 47, 47, 0.1)' }}>
+                    {error}
+                  </Alert>
+                )}
+
+                {success && (
+                  <Alert 
+                    severity="success" 
+                    sx={{ 
+                      mb: 3, 
+                      bgcolor: 'rgba(46, 125, 50, 0.1)',
+                      '& .MuiAlert-icon': { color: accent }
+                    }}
+                  >
+                    <VerifiedUserIcon sx={{ mr: 1 }} />
+                    Верификация успешна! Перенаправление...
+                  </Alert>
+                )}
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  disabled={loading}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: '8px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 4px 24px 0 rgba(0,191,255,0.15)',
+                    transition: 'all 0.3s',
+                    bgcolor: accent,
+                    color: textLight,
+                    '&:hover': { 
+                      boxShadow: '0 8px 32px 0 rgba(0,191,255,0.25)',
+                      bgcolor: accent2
+                    },
                   }}
                 >
-                  {verificationCode}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Шаг 2: Перейдите в свой профиль Roblox
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Шаг 3: Вставьте код в поле "About"
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Шаг 4: Нажмите "Проверить"
-                </Typography>
-              </Box>
-            )}
-
-            {activeStep === 2 && (
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h6" gutterBottom>
-                  Верификация успешна!
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Теперь вы можете получать бесплатные робуксы за выполнение заданий.
-                </Typography>
-              </Box>
-            )}
-
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              >
-                Назад
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleNext}
-                disabled={activeStep === steps.length - 1}
-              >
-                {activeStep === steps.length - 1 ? 'Завершить' : 'Далее'}
-              </Button>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    </Container>
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Войти'
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </Fade>
+      </Container>
+    </Box>
   );
 };
 

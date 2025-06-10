@@ -41,14 +41,6 @@ const tasks = [
     link: 'https://www.youtube.com/'
   },
   {
-    id: 2,
-    title: 'Вступление в Discord',
-    description: 'Присоединитесь к нашему Discord серверу для общения с другими игроками.',
-    reward: 25,
-    type: 'discord',
-    link: 'https://discord.com/'
-  },
-  {
     id: 3,
     title: 'Лайк на видео',
     description: 'Поставьте лайк на наше последнее видео, чтобы поддержать нас.',
@@ -153,7 +145,6 @@ const Tasks = () => {
                     <CardContent sx={{ p: 3, flexGrow: 1 }}>
                       <Box sx={{ textAlign: 'center', mb: 2 }}>
                         {task.type === 'youtube' && <YouTubeIcon sx={{ fontSize: 50, color: accent2 }} />}
-                        {task.type === 'discord' && <ForumIcon sx={{ fontSize: 50, color: accent }} />}
                         {task.type === 'referral' && <PersonAddIcon sx={{ fontSize: 50, color: accent2 }} />}
                         {task.type === 'text' && <EmojiEventsIcon sx={{ fontSize: 50, color: accent }} />}
                       </Box>
@@ -237,7 +228,6 @@ const Tasks = () => {
                       }}
                     >
                       {selectedTask.type === 'youtube' && 'Перейти на YouTube'}
-                      {selectedTask.type === 'discord' && 'Присоединиться к Discord'}
                     </Button>
                   </Box>
                 )}

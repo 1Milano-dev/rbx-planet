@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RobuxPlanet - Получите бесплатные робуксы</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" type="image/png">
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" type="image/png">
     <style>
         :root {
             --primary-dark: #1a1a2e; /* Основной очень темный фон */
@@ -214,12 +214,66 @@
             margin: 10px;
             display: inline-block; /* Чтобы кнопки были в ряд */
         }
+
+        /* Стили для кабинета пользователя */
+        .user-cabinet {
+            position: relative;
+            display: inline-block;
+            margin-left: 20px; /* Отступ от других пунктов меню */
+        }
+
+        .user-icon {
+            font-size: 1.8rem; /* Размер иконки */
+            cursor: pointer;
+            color: var(--light-blue);
+            transition: color 0.3s ease;
+            vertical-align: middle;
+        }
+
+        .user-icon:hover {
+            color: var(--highlight-color);
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%; /* Под иконкой */
+            right: 0;
+            background-color: var(--secondary-dark); /* Темный фон */
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            min-width: 180px;
+            padding: 10px 0;
+            display: none; /* Изначально скрыто */
+            text-align: left;
+        }
+
+        .user-dropdown p.dropdown-username {
+            padding: 8px 15px;
+            color: var(--highlight-color);
+            font-weight: 700;
+            border-bottom: 1px solid var(--card-dark);
+            margin-bottom: 5px;
+        }
+
+        .user-dropdown .dropdown-item {
+            display: block;
+            padding: 8px 15px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background-color: var(--accent-blue);
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="container">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Logo" class="logo-img">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Logo" class="logo-img">
             <h1>RobuxPlanet</h1>
             <p>Получайте бесплатные робуксы за выполнение заданий</p>
             <div class="balance-display">
@@ -247,7 +301,15 @@
             <a href="#tasks-section">Задания</a>
             <a href="#">Купить R$</a>
             <a href="#">Купить Limited</a>
-            <a href="login.html">Войти</a>
+            <a href="login.html" id="loginLink">Войти</a>
+            <div class="user-cabinet" id="userCabinet" style="display: none;">
+                <span class="user-icon" id="userIcon">&#128100;</span>
+                <div class="user-dropdown" id="userDropdown">
+                    <p class="dropdown-username" id="dropdownUsername"></p>
+                    <a href="#" class="dropdown-item">Настройки</a>
+                    <a href="#" class="dropdown-item" id="logoutButton">Выйти</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -265,7 +327,7 @@
 
     <section class="image-section">
         <div class="container">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Character Logo" class="logo-img">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAYAAAB5fY51AAAAAXNSR0IArs4c6QAAAXRJREFUeJzt1AEBAAACoDP1/rW2J0CAgAEBAgQEBAQIECBAgAABAgQEBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAgAEBAgS8w+C8AAAB9+f99AAAAABJRU5ErkJggg==" alt="RobuxPlanet Character Logo" class="logo-img">
         </div>
     </section>
 
@@ -393,6 +455,39 @@
             adminUsernameDisplay.textContent = loggedInUser;
             adminPanel.style.display = 'block'; // Показываем панель
         }
+
+        // Логика отображения кабинета пользователя
+        const loginLink = document.getElementById('loginLink');
+        const userCabinet = document.getElementById('userCabinet');
+        const userIcon = document.getElementById('userIcon');
+        const userDropdown = document.getElementById('userDropdown');
+        const dropdownUsername = document.getElementById('dropdownUsername');
+        const logoutButton = document.getElementById('logoutButton');
+
+        if (loggedInUser) {
+            loginLink.style.display = 'none'; // Скрываем ссылку "Войти"
+            userCabinet.style.display = 'inline-block'; // Показываем кабинет пользователя
+            dropdownUsername.textContent = loggedInUser; // Отображаем никнейм
+        }
+
+        // Переключение видимости выпадающего меню при клике на иконку
+        userIcon.addEventListener('click', () => {
+            userDropdown.style.display = userDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Закрытие выпадающего меню при клике вне его
+        document.addEventListener('click', (event) => {
+            if (!userCabinet.contains(event.target) && userDropdown.style.display === 'block') {
+                userDropdown.style.display = 'none';
+            }
+        });
+
+        // Обработчик кнопки "Выйти"
+        logoutButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Предотвращаем переход по ссылке
+            localStorage.removeItem('loggedInUsername'); // Удаляем никнейм
+            window.location.reload(); // Перезагружаем страницу
+        });
     </script>
 </body>
 </html> 

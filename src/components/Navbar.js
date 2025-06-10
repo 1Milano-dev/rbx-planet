@@ -21,6 +21,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import CasinoIcon from '@mui/icons-material/Casino';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);
@@ -85,11 +88,35 @@ const Navbar = () => {
                 </Box>
                 <Button
                   component={RouterLink}
+                  to="/wheel"
+                  startIcon={<CasinoIcon />}
+                  color="primary"
+                >
+                  Колесо
+                </Button>
+                <Button
+                  component={RouterLink}
                   to="/tasks"
                   startIcon={<AssignmentIcon />}
                   color="primary"
                 >
                   Задания
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/faq"
+                  startIcon={<HelpOutlineIcon />}
+                  color="primary"
+                >
+                  FAQ
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/feedback"
+                  startIcon={<FeedbackIcon />}
+                  color="primary"
+                >
+                  Обратная связь
                 </Button>
                 <Button
                   component={RouterLink}
@@ -136,7 +163,7 @@ const Navbar = () => {
                     sx={{ color: theme.palette.text.primary }}
                   >
                     <AccountCircleIcon sx={{ mr: 1 }} />
-                    {user.username}
+                    Личный кабинет
                   </MenuItem>
                   <MenuItem 
                     component={RouterLink} 

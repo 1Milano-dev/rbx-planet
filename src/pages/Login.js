@@ -12,6 +12,7 @@ import {
   useTheme,
   Fade,
   Zoom,
+  Switch,
   FormControlLabel
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -32,41 +33,26 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [pin, setPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [isRegisterMode, setIsRegisterMode] = useState(false);
   const navigate = useNavigate();
 
-  // Автоматическая инициализация пользователя 310x216 с PIN-кодом 2008
   useEffect(() => {
-    let storedUser = JSON.parse(localStorage.getItem('user'));
-    if (!storedUser || storedUser.username !== '310x216' || !storedUser.pin) {
-      const defaultUser = {
-        username: '310x216',
-        verified: true,
-        avatarUrl: 'https://www.roblox.com/headshot-thumbnail/image?userId=87948332&width=420&height=420&format=png', // Пример аватара для 310x216
-        pin: '2008',
-        balance: 0,
-        history: [],
-        achievements: [],
-        lastBonus: null
-      };
-      localStorage.setItem('user', JSON.stringify(defaultUser));
-      setUsername('310x216');
-      setAvatarUrl(defaultUser.avatarUrl);
-    } else {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (storedUser) {
       setUsername(storedUser.username);
       setAvatarUrl(storedUser.avatarUrl);
     }
   }, []);
 
-  // Получение аватара пользователя (для отображения, если ник меняется)
-  const fetchAvatar = async (username) => {
+  const fetchAvatar = async (inputUsername) => {
     try {
-      const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${username}`);
+      const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${inputUsername}`);
       const data = await response.json();
-
       if (data.Id) {
         setAvatarUrl(`https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.Id}&size=150x150&format=Png&isCircular=true`);
       } else {
-        setAvatarUrl(''); // Очищаем аватар, если ник не найден
+        setAvatarUrl('');
       }
     } catch (error) {
       console.error('Error fetching avatar:', error);
@@ -74,7 +60,6 @@ const Login = () => {
     }
   };
 
-  // Обработка изменения имени пользователя
   const handleUsernameChange = (e) => {
     const newUsername = e.target.value;
     setUsername(newUsername);
@@ -85,24 +70,85 @@ const Login = () => {
     }
   };
 
-  // Обработка отправки формы (только для входа по PIN-коду)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    if (isRegisterMode) {
+      if (pin.length !== 4 || isNaN(pin)) {
+        setError('PIN-код должен состоять из 4 цифр.');
+        setLoading(false);
+        return;
+      }
+      if (pin !== confirmPin) {
+        setError('PIN-коды не совпадают.');
+        setLoading(false);
+        return;
+      }
 
-    if (storedUser && storedUser.username === username && storedUser.pin === pin) {
-      // Успешный вход по PIN-коду
-      localStorage.setItem('user', JSON.stringify(storedUser)); // Обновляем localStorage на случай изменений
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      if (allUsers.some(u => u.username === username)) {
+        setError('Пользователь с таким ником уже зарегистрирован.');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://api.roblox.com/users/get-by-username?username=${username}`);
+        const data = await response.json();
+        if (!data.Id) {
+          setError('Roblox пользователь с таким ником не найден.');
+          setLoading(false);
+          return;
+        }
+        const newAvatarUrl = `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.Id}&size=150x150&format=Png&isCircular=true`;
+
+        const newUser = {
+          username,
+          pin,
+          avatarUrl: newAvatarUrl,
+          balance: 0,
+          history: [],
+          achievements: [],
+          isAdmin: false // Default to false for new users
+        };
+        allUsers.push(newUser);
+        localStorage.setItem('allUsers', JSON.stringify(allUsers));
+        localStorage.setItem('user', JSON.stringify(newUser));
+
+        setSuccess(true);
+        setError('');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      } catch (err) {
+        setError('Ошибка при проверке Roblox ника. Пожалуйста, попробуйте еще раз.');
+        setLoading(false);
+      }
+
     } else {
-      setError('Неверное имя пользователя или PIN-код.');
-      setLoading(false);
+      const allUsers = JSON.parse(localStorage.getItem('allUsers') || '[]');
+      const foundUser = allUsers.find(u => u.username === username && u.pin === pin);
+
+      if (foundUser) {
+        // Set isAdmin to true for 310x216
+        if (foundUser.username === '310x216') {
+          foundUser.isAdmin = true;
+          // Update the user in allUsers array
+          const updatedUsers = allUsers.map(u => u.username === '310x216' ? foundUser : u);
+          localStorage.setItem('allUsers', JSON.stringify(updatedUsers));
+        }
+        localStorage.setItem('user', JSON.stringify(foundUser));
+        setSuccess(true);
+        setError('');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      } else {
+        setError('Неверное имя пользователя или PIN-код.');
+        setLoading(false);
+      }
     }
   };
 
@@ -114,10 +160,10 @@ const Login = () => {
             <CardContent sx={{ p: 4 }}>
               <Box sx={{ textAlign: 'center', mb: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom sx={{ color: accent, fontWeight: 'bold' }}>
-                  Вход в RobuxPlanet
+                  {isRegisterMode ? 'Регистрация' : 'Вход в RobuxPlanet'}
                 </Typography>
                 <Typography variant="body1" color="#b0b8d1">
-                  Используйте свой ник и PIN-код для входа
+                  {isRegisterMode ? 'Создайте свой аккаунт' : 'Используйте свой ник и PIN-код для входа'}
                 </Typography>
               </Box>
 
@@ -192,6 +238,36 @@ const Login = () => {
                   }}
                 />
 
+                {isRegisterMode && (
+                  <TextField
+                    fullWidth
+                    label="Подтвердите PIN-код"
+                    variant="outlined"
+                    type="password"
+                    inputProps={{ maxLength: 4, inputMode: 'numeric' }}
+                    value={confirmPin}
+                    onChange={(e) => setConfirmPin(e.target.value.replace(/[^0-9]/g, ''))}
+                    required
+                    sx={{
+                      mb: 3,
+                      '& .MuiOutlinedInput-root': {
+                        '& fieldset': { borderColor: cardBg },
+                        '&:hover fieldset': { borderColor: accent },
+                        '&.Mui-focused fieldset': { borderColor: accent },
+                        bgcolor: darkBg,
+                        color: textLight,
+                      },
+                      '& .MuiInputLabel-root': { color: '#b0b8d1' },
+                      '& .MuiInputBase-input': { color: textLight },
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <LockIcon sx={{ color: accent, mr: 1 }} />
+                      ),
+                    }}
+                  />
+                )}
+
                 {error && (
                   <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(211, 47, 47, 0.1)' }}>
                     {error}
@@ -208,7 +284,7 @@ const Login = () => {
                     }}
                   >
                     <VerifiedUserIcon sx={{ mr: 1 }} />
-                    Вход выполнен! Перенаправление...
+                    {isRegisterMode ? 'Регистрация успешна! Перенаправление...' : 'Вход выполнен! Перенаправление...'}
                   </Alert>
                 )}
 
@@ -216,7 +292,7 @@ const Login = () => {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={loading || !username || pin.length !== 4}
+                  disabled={loading || !username || pin.length !== 4 || (isRegisterMode && confirmPin.length !== 4 && pin !== confirmPin)}
                   sx={{
                     py: 1.5,
                     borderRadius: '8px',
@@ -234,10 +310,19 @@ const Login = () => {
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    'Войти'
+                    isRegisterMode ? 'Зарегистрироваться' : 'Войти'
                   )}
                 </Button>
               </form>
+
+              <Box sx={{ mt: 3, textAlign: 'center' }}>
+                <Button
+                  onClick={() => setIsRegisterMode(!isRegisterMode)}
+                  sx={{ color: accent, textTransform: 'none' }}
+                >
+                  {isRegisterMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться'}
+                </Button>
+              </Box>
             </CardContent>
           </Card>
         </Fade>

@@ -8,12 +8,15 @@ import {
   Card,
   CardContent,
   Box,
-  useTheme
+  useTheme,
+  Paper
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import SecurityIcon from '@mui/icons-material/Security';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import SpeedIcon from '@mui/icons-material/Speed';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const Home = () => {
   const theme = useTheme();
@@ -166,96 +169,98 @@ const Home = () => {
       </Box>
 
       {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: { xs: 6, md: 10 } }}>
-        <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 5, color: theme.palette.text.primary }}>
-          Наши Особенности
-        </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={6} md={4}>
-            <Card
-              sx={{
-                height: '100%',
-                borderRadius: '15px',
-                boxShadow: theme.shadows[3],
-                transition: 'all 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: theme.shadows[8],
-                },
-                bgcolor: theme.palette.background.paper,
-              }}
-            >
-              <CardContent sx={{ p: 4 }}>
-                <Box sx={{ textAlign: 'center', mb: 2 }}>
-                  <ShoppingCartIcon sx={{ fontSize: 60, color: theme.palette.primary.main }} />
-                </Box>
-                <Typography variant="h5" component="h3" gutterBottom align="center" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-                  Купить Robux
+      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            align="center"
+            gutterBottom
+            sx={{ mb: 6, fontWeight: 'bold' }}
+          >
+            Почему выбирают нас
+          </Typography>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-10px)',
+                  },
+                }}
+              >
+                <SecurityIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" component="h3" gutterBottom>
+                  Безопасность
                 </Typography>
-                <Typography align="center" color="text.secondary">
-                  Получите Robux по лучшим ценам с мгновенной доставкой
+                <Typography>
+                  Гарантируем безопасность каждой транзакции и защиту ваших данных
                 </Typography>
-              </CardContent>
-            </Card>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-10px)',
+                  },
+                }}
+              >
+                <SpeedIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" component="h3" gutterBottom>
+                  Скорость
+                </Typography>
+                <Typography>
+                  Мгновенное зачисление Robux после подтверждения оплаты
+                </Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.3s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-10px)',
+                  },
+                }}
+              >
+                <SupportAgentIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                <Typography variant="h5" component="h3" gutterBottom>
+                  Поддержка
+                </Typography>
+                <Typography>
+                  Круглосуточная поддержка для решения любых вопросов
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card
-              sx={{
-                height: '100%',
-                borderRadius: '15px',
-                boxShadow: theme.shadows[3],
-                transition: 'all 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: theme.shadows[8],
-                },
-                bgcolor: theme.palette.background.paper,
-              }}
-            >
-              <CardContent sx={{ p: 4 }}>
-                <Box sx={{ textAlign: 'center', mb: 2 }}>
-                  <AccountBalanceWalletIcon sx={{ fontSize: 60, color: theme.palette.primary.main }} />
-                </Box>
-                <Typography variant="h5" component="h3" gutterBottom align="center" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-                  Пополнить Баланс
-                </Typography>
-                <Typography align="center" color="text.secondary">
-                  Доступны различные способы оплаты
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Card
-              sx={{
-                height: '100%',
-                borderRadius: '15px',
-                boxShadow: theme.shadows[3],
-                transition: 'all 0.3s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-5px)',
-                  boxShadow: theme.shadows[8],
-                },
-                bgcolor: theme.palette.background.paper,
-              }}
-            >
-              <CardContent sx={{ p: 4 }}>
-                <Box sx={{ textAlign: 'center', mb: 2 }}>
-                  <SecurityIcon sx={{ fontSize: 60, color: theme.palette.primary.main }} />
-                </Box>
-                <Typography variant="h5" component="h3" gutterBottom align="center" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
-                  Безопасные Транзакции
-                </Typography>
-                <Typography align="center" color="text.secondary">
-                  Надежная и безопасная обработка платежей
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
 
-      {/* Recent Sales Section */}
+      {/* Footer */}
       <Box sx={{ bgcolor: theme.palette.background.default, py: { xs: 6, md: 10 } }}>
         <Container maxWidth="lg">
           <Typography variant="h4" component="h2" gutterBottom align="center" sx={{ fontWeight: 'bold', mb: 5, color: theme.palette.text.primary }}>

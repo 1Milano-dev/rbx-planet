@@ -1,31 +1,32 @@
 # RobuxPlanet
 
-A modern web application for buying and selling Robux and Limited items in Roblox.
+A modern web application for Roblox users with a beautiful and responsive UI.
 
 ## Features
 
-- Buy Robux at competitive prices
-- Purchase Limited items
-- Add balance to your account
-- Secure payment processing
-- User-friendly interface
-- Real-time transaction updates
+- User authentication with Roblox username
+- PIN-based security
+- Modern and responsive design
+- Beautiful animations and effects
+- Admin panel support
 
-## Prerequisites
+## Technologies Used
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+- React
+- Material-UI
+- React Router
+- Local Storage for data persistence
 
-## Installation
+## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/robux-planet.git
-cd robux-planet
+git clone https://github.com/yourusername/robuxplanet.git
 ```
 
 2. Install dependencies:
 ```bash
+cd robuxplanet
 npm install
 ```
 
@@ -34,25 +35,17 @@ npm install
 npm start
 ```
 
-The application will be available at `http://localhost:3000`
+4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Project Structure
 
 ```
 src/
+  ├── pages/          # Page components
   ├── components/     # Reusable components
-  ├── pages/         # Page components
-  ├── App.js         # Main application component
-  └── index.js       # Application entry point
+  ├── assets/         # Static assets
+  └── App.js         # Main application component
 ```
-
-## Technologies Used
-
-- React
-- Material-UI
-- React Router
-- Node.js
-- Express (backend)
 
 ## Contributing
 

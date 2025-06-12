@@ -23,43 +23,122 @@ const Home = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          bgcolor: theme.palette.primary.main,
-          color: theme.palette.common.white,
-          py: { xs: 6, md: 10 },
-          textAlign: 'center',
           position: 'relative',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
           overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("/roblox_character.png") no-repeat bottom right',
+            backgroundSize: 'contain',
+            opacity: 0.1,
+            animation: 'float 6s ease-in-out infinite',
+            '@keyframes float': {
+              '0%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+              '100%': { transform: 'translateY(0px)' }
+            }
+          }
         }}
       >
-        <Container maxWidth="md">
-          <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-            Добро пожаловать на RobuxPlanet
-          </Typography>
-          <Typography variant="h6" component="h2" gutterBottom sx={{ opacity: 0.9 }}>
-            Ваш надежный источник Robux и лимитированных предметов
-          </Typography>
-          <Button
-            component={RouterLink}
-            to="/buy-robux"
-            variant="contained"
+        <Container maxWidth="lg">
+          <Box
             sx={{
-              mt: 4,
-              bgcolor: theme.palette.secondary.main,
+              position: 'relative',
+              zIndex: 1,
+              textAlign: 'center',
               color: theme.palette.common.white,
-              py: 1.5,
-              px: 4,
-              fontSize: '1.1rem',
-              borderRadius: '30px',
-              boxShadow: theme.shadows[5],
-              '&:hover': {
-                bgcolor: theme.palette.secondary.dark,
-                transform: 'translateY(-3px)',
-                boxShadow: theme.shadows[8],
-              },
+              py: 8,
+              animation: 'fadeIn 1s ease-in',
+              '@keyframes fadeIn': {
+                '0%': { opacity: 0, transform: 'translateY(20px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' }
+              }
             }}
           >
-            Начать
-          </Button>
+            <Typography
+              variant="h1"
+              component="h1"
+              sx={{
+                fontSize: { xs: '2.5rem', md: '4rem' },
+                fontWeight: 700,
+                mb: 2,
+                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                background: 'linear-gradient(45deg, #FFD700, #FFA500)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                animation: 'gradient 3s ease infinite',
+                '@keyframes gradient': {
+                  '0%': { backgroundPosition: '0% 50%' },
+                  '50%': { backgroundPosition: '100% 50%' },
+                  '100%': { backgroundPosition: '0% 50%' }
+                }
+              }}
+            >
+              RBX Planet
+            </Typography>
+            <Typography
+              variant="h2"
+              component="h2"
+              sx={{
+                fontSize: { xs: '1.5rem', md: '2.5rem' },
+                fontWeight: 500,
+                mb: 4,
+                color: theme.palette.common.white,
+                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+              }}
+            >
+              Купите Robux по лучшей цене
+            </Typography>
+            <Typography
+              variant="h3"
+              component="h3"
+              sx={{
+                fontSize: { xs: '1.2rem', md: '1.8rem' },
+                fontWeight: 400,
+                mb: 6,
+                color: theme.palette.common.white,
+                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+              }}
+            >
+              1 рубль = 2 робукса
+            </Typography>
+            <Button
+              component={RouterLink}
+              to="/buy-robux"
+              variant="contained"
+              sx={{
+                mt: 4,
+                bgcolor: theme.palette.secondary.main,
+                color: theme.palette.common.white,
+                py: 1.5,
+                px: 4,
+                fontSize: '1.1rem',
+                borderRadius: '30px',
+                boxShadow: theme.shadows[5],
+                '&:hover': {
+                  bgcolor: theme.palette.secondary.dark,
+                  transform: 'translateY(-3px)',
+                  boxShadow: theme.shadows[8],
+                },
+                animation: 'pulse 2s infinite',
+                '@keyframes pulse': {
+                  '0%': { transform: 'scale(1)' },
+                  '50%': { transform: 'scale(1.05)' },
+                  '100%': { transform: 'scale(1)' }
+                }
+              }}
+            >
+              Начать
+            </Button>
+          </Box>
         </Container>
         {/* Decorative Image */}
         <Box
@@ -70,12 +149,18 @@ const Home = () => {
             position: 'absolute',
             bottom: 0,
             right: 0,
-            height: 'auto', // Adjust as needed
-            width: { xs: '50%', md: '30%' }, // Adjust size responsively
-            opacity: 0.7, // Subtle effect
-            pointerEvents: 'none', // Make it non-interactive
-            transform: 'translateX(20%)', // Move it slightly outside
-            filter: 'drop-shadow(0 0 15px rgba(0,255,255,0.5))' // Add a glowing effect
+            height: 'auto',
+            width: { xs: '50%', md: '30%' },
+            opacity: 0.7,
+            pointerEvents: 'none',
+            transform: 'translateX(20%)',
+            filter: 'drop-shadow(0 0 15px rgba(0,255,255,0.5))',
+            animation: 'float 6s ease-in-out infinite',
+            '@keyframes float': {
+              '0%': { transform: 'translateX(20%) translateY(0px)' },
+              '50%': { transform: 'translateX(20%) translateY(-20px)' },
+              '100%': { transform: 'translateX(20%) translateY(0px)' }
+            }
           }}
         />
       </Box>

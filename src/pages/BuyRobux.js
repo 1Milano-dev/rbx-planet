@@ -49,7 +49,7 @@ const BuyRobux = () => {
 
   // DonationAlerts ссылка (замените на свой ник)
   const donationAlertsNick = 'rbxplanet';
-  const amount = (parseInt(robuxAmount) || 0) * 1.5; // Изменяем курс: 1 Robux = 1.5 рубля
+  const amount = (parseInt(robuxAmount) || 0) * 0.5; // Изменяем курс: 1 Robux = 0.5 рубля (1 рубль = 2 робукса)
   const donationUrl = `https://www.donationalerts.com/r/rbxplanet`;
 
   return (

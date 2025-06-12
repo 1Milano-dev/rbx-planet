@@ -325,6 +325,9 @@ const Home = () => {
           </Grid>
         </Container>
       </Box>
+
+      {/* Тестовый вывод изображения для проверки */}
+      <img src="/roblox_character1.png" alt="roblox_character1" style={{ width: 200, border: '2px solid red', zIndex: 9999, position: 'relative' }} />
     </Box>
   );
 };

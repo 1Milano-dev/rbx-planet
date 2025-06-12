@@ -1,64 +1,74 @@
-# RobuxPlanet
+# RBX Planet - Платформа для покупки Robux
 
-A modern web application for Roblox users with a beautiful and responsive UI.
+RBX Planet - это современная платформа для покупки Robux с множеством уникальных функций и возможностей.
 
-## Features
+## 🌟 Особенности
 
-- User authentication with Roblox username
-- PIN-based security
-- Modern and responsive design
-- Beautiful animations and effects
-- Admin panel support
+- 💰 Покупка Robux с выгодными ценами
+- 🎮 Система уровней и достижений
+- 🎁 Ежедневные бонусы
+- 👥 Реферальная система
+- 🏆 Таблица лидеров
+- 🛍️ Магазин предметов
+- 🎉 Специальные события
+- 🔒 Безопасные транзакции
 
-## Technologies Used
+## 🚀 Технологии
 
-- React
+- React.js
 - Material-UI
-- React Router
-- Local Storage for data persistence
+- Node.js
+- MongoDB
+- Express.js
+- Vercel (деплой)
 
-## Getting Started
+## 📦 Установка
 
-1. Clone the repository:
+1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/yourusername/robuxplanet.git
+git clone https://github.com/your-username/rbx-planet.git
+cd rbx-planet
 ```
 
-2. Install dependencies:
+2. Установите зависимости:
 ```bash
-cd robuxplanet
 npm install
 ```
 
-3. Start the development server:
+3. Создайте файл .env и настройте переменные окружения:
+```env
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+```
+
+4. Запустите проект:
 ```bash
-npm start
+npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🔧 Разработка
 
-## Project Structure
+- `npm run dev` - запуск в режиме разработки
+- `npm run build` - сборка проекта
+- `npm run start` - запуск production версии
+- `npm run lint` - проверка кода
+- `npm run test` - запуск тестов
 
-```
-src/
-  ├── pages/          # Page components
-  ├── components/     # Reusable components
-  ├── assets/         # Static assets
-  └── App.js         # Main application component
-```
+## 📝 Лицензия
 
-## Contributing
+MIT License - подробности в файле [LICENSE](LICENSE)
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## 👥 Команда
 
-## License
+- [Ваше имя] - Разработчик
+- [Другие участники] - Роли
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🤝 Вклад в проект
 
-## Disclaimer
+Мы приветствуем вклад в развитие проекта! Пожалуйста, ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md) для получения дополнительной информации.
 
-This project is not affiliated with Roblox Corporation. All trademarks are owned by their respective owners. 
+## 📞 Контакты
+
+- Email: your.email@example.com
+- Discord: [Присоединиться к серверу](https://discord.gg/your-server)
+- Telegram: [@your-username](https://t.me/your-username) 

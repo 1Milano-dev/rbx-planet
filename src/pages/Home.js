@@ -17,9 +17,36 @@ import SecurityIcon from '@mui/icons-material/Security';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SpeedIcon from '@mui/icons-material/Speed';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import { motion } from 'framer-motion';
+
+const MotionButton = motion(Button);
+const MotionCard = motion(Card);
 
 const Home = () => {
   const theme = useTheme();
+
+  const featureItems = [
+    {
+      icon: <AccountBalanceWalletIcon sx={{ fontSize: 60, color: theme.palette.secondary.main }} />,
+      title: 'Выгодные цены',
+      description: 'Получайте больше Robux за меньшие деньги благодаря нашим эксклюзивным предложениям.',
+    },
+    {
+      icon: <SecurityIcon sx={{ fontSize: 60, color: theme.palette.secondary.main }} />,
+      title: 'Безопасные транзакции',
+      description: 'Ваши данные и средства надежно защищены современными технологиями шифрования.',
+    },
+    {
+      icon: <SpeedIcon sx={{ fontSize: 60, color: theme.palette.secondary.main }} />,
+      title: 'Мгновенная доставка',
+      description: 'Robux начисляются на ваш аккаунт практически сразу после покупки.',
+    },
+    {
+      icon: <SupportAgentIcon sx={{ fontSize: 60, color: theme.palette.secondary.main }} />,
+      title: 'Поддержка 24/7',
+      description: 'Наша команда всегда готова помочь вам с любыми вопросами и проблемами.',
+    },
+  ];
 
   return (
     <Box>
@@ -27,11 +54,14 @@ const Home = () => {
       <Box
         sx={{
           position: 'relative',
-          minHeight: '100vh',
+          minHeight: 'calc(100vh - 64px)',
           display: 'flex',
           alignItems: 'center',
-          background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+          justifyContent: 'center',
+          background: `radial-gradient(circle at 70% 30%, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
           overflow: 'hidden',
+          pt: { xs: 8, md: 0 },
+          pb: { xs: 8, md: 0 },
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -40,12 +70,31 @@ const Home = () => {
             right: 0,
             bottom: 0,
             background: 'url("/roblox_character.png") no-repeat bottom right',
-            backgroundSize: 'contain',
-            opacity: 0.1,
-            animation: 'float 6s ease-in-out infinite',
+            backgroundSize: '50% auto',
+            backgroundPosition: 'right -10% bottom -20px',
+            opacity: 0.08,
+            animation: 'float 6s ease-in-out infinite alternate',
             '@keyframes float': {
               '0%': { transform: 'translateY(0px)' },
               '50%': { transform: 'translateY(-20px)' },
+              '100%': { transform: 'translateY(0px)' }
+            }
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("/roblox_character1.png") no-repeat top left',
+            backgroundSize: '40% auto',
+            backgroundPosition: 'left -5% top -10px',
+            opacity: 0.05,
+            animation: 'float 7s ease-in-out infinite reverse',
+            '@keyframes float': {
+              '0%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(15px)' },
               '100%': { transform: 'translateY(0px)' }
             }
           }
@@ -57,7 +106,7 @@ const Home = () => {
               position: 'relative',
               zIndex: 1,
               textAlign: 'center',
-              color: theme.palette.common.white,
+              color: theme.palette.text.primary,
               py: 8,
               animation: 'fadeIn 1s ease-in',
               '@keyframes fadeIn': {
@@ -70,32 +119,30 @@ const Home = () => {
               variant="h1"
               component="h1"
               sx={{
-                fontSize: { xs: '2.5rem', md: '4rem' },
+                fontSize: { xs: '2.8rem', sm: '3.5rem', md: '5rem' },
                 fontWeight: 700,
                 mb: 2,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                animation: 'gradient 3s ease infinite',
-                '@keyframes gradient': {
+                textShadow: '0 5px 25px rgba(0, 201, 255, 0.4)',
+                ...theme.typography.h1,
+                animation: 'gradient-shift 8s ease infinite',
+                '@keyframes gradient-shift': {
                   '0%': { backgroundPosition: '0% 50%' },
                   '50%': { backgroundPosition: '100% 50%' },
                   '100%': { backgroundPosition: '0% 50%' }
                 }
               }}
             >
-              RBX Planet
+              RobuxPlanet
             </Typography>
             <Typography
               variant="h2"
               component="h2"
               sx={{
-                fontSize: { xs: '1.5rem', md: '2.5rem' },
-                fontWeight: 500,
-                mb: 4,
-                color: theme.palette.common.white,
-                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem' },
+                fontWeight: 600,
+                mb: 3,
+                color: theme.palette.text.secondary,
+                textShadow: '0 2px 10px rgba(0,0,0,0.3)'
               }}
             >
               Купите Robux по лучшей цене
@@ -104,181 +151,82 @@ const Home = () => {
               variant="h3"
               component="h3"
               sx={{
-                fontSize: { xs: '1.2rem', md: '1.8rem' },
+                fontSize: { xs: '1.2rem', sm: '1.5rem', md: '2rem' },
                 fontWeight: 400,
                 mb: 6,
-                color: theme.palette.common.white,
-                textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                color: theme.palette.text.primary,
+                textShadow: '0 1px 5px rgba(0,0,0,0.2)'
               }}
             >
               1 рубль = 2 робукса
             </Typography>
-            <Button
+            <MotionButton
               component={RouterLink}
               to="/buy-robux"
               variant="contained"
-              sx={{
-                mt: 4,
-                bgcolor: theme.palette.secondary.main,
-                color: theme.palette.common.white,
-                py: 1.5,
-                px: 4,
-                fontSize: '1.1rem',
-                borderRadius: '30px',
-                boxShadow: theme.shadows[5],
-                '&:hover': {
-                  bgcolor: theme.palette.secondary.dark,
-                  transform: 'translateY(-3px)',
-                  boxShadow: theme.shadows[8],
-                },
-                animation: 'pulse 2s infinite',
-                '@keyframes pulse': {
-                  '0%': { transform: 'scale(1)' },
-                  '50%': { transform: 'scale(1.05)' },
-                  '100%': { transform: 'scale(1)' }
-                }
-              }}
+              color="primary"
+              size="large"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              whileHover={{ scale: 1.05, boxShadow: theme.components.MuiButton.styleOverrides.root['&:hover'].boxShadow }}
+              sx={{ mt: 4, px: 6, py: 2, fontSize: '1.2rem' }}
             >
               Начать
-            </Button>
+            </MotionButton>
           </Box>
         </Container>
-        {/* Decorative Image */}
-        <Box
-          component="img"
-          src="/roblox_character.png"
-          alt="Roblox Character"
-          sx={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            height: 'auto',
-            width: { xs: '50%', md: '30%' },
-            opacity: 0.7,
-            pointerEvents: 'none',
-            transform: 'translateX(20%)',
-            filter: 'drop-shadow(0 0 15px rgba(0,255,255,0.5))',
-            animation: 'float 6s ease-in-out infinite',
-            '@keyframes float': {
-              '0%': { transform: 'translateX(20%) translateY(0px)' },
-              '50%': { transform: 'translateX(20%) translateY(-20px)' },
-              '100%': { transform: 'translateX(20%) translateY(0px)' }
-            }
-          }}
-        />
-        {/* Additional Decorative Image */}
-        <Box
-          component="img"
-          src="/roblox_character1.png"
-          alt="Roblox Character 1"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: 'auto',
-            width: { xs: '30%', md: '20%' },
-            opacity: 0.5,
-            pointerEvents: 'none',
-            transform: 'translateX(-20%)',
-            filter: 'drop-shadow(0 0 15px rgba(0,255,255,0.5))',
-            animation: 'float 6s ease-in-out infinite',
-            '@keyframes float': {
-              '0%': { transform: 'translateX(-20%) translateY(0px)' },
-              '50%': { transform: 'translateX(-20%) translateY(-20px)' },
-              '100%': { transform: 'translateX(-20%) translateY(0px)' }
-            }
-          }}
-        />
       </Box>
 
       {/* Features Section */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
+      <Box sx={{ py: 10, bgcolor: theme.palette.background.default }}>
         <Container maxWidth="lg">
           <Typography
             variant="h3"
             component="h2"
             align="center"
             gutterBottom
-            sx={{ mb: 6, fontWeight: 'bold' }}
+            sx={{ 
+              mb: 6,
+              fontWeight: 700,
+              background: 'linear-gradient(45deg, #00C9FF 30%, #92FE9D 90%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
           >
             Почему выбирают нас
           </Typography>
           <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-10px)',
-                  },
-                }}
-              >
-                <SecurityIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" component="h3" gutterBottom>
-                  Безопасность
-                </Typography>
-                <Typography>
-                  Гарантируем безопасность каждой транзакции и защиту ваших данных
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-10px)',
-                  },
-                }}
-              >
-                <SpeedIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" component="h3" gutterBottom>
-                  Скорость
-                </Typography>
-                <Typography>
-                  Мгновенное зачисление Robux после подтверждения оплаты
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-10px)',
-                  },
-                }}
-              >
-                <SupportAgentIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h5" component="h3" gutterBottom>
-                  Поддержка
-                </Typography>
-                <Typography>
-                  Круглосуточная поддержка для решения любых вопросов
-                </Typography>
-              </Paper>
-            </Grid>
+            {featureItems.map((item, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <MotionCard
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index, duration: 0.6 }}
+                  whileHover={{ translateY: -10, boxShadow: theme.components.MuiCard.styleOverrides.root['&:hover'].boxShadow }}
+                  sx={{
+                    textAlign: 'center',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    p: 3,
+                    bgcolor: theme.palette.background.paper,
+                    border: `1px solid ${theme.palette.primary.dark}`,
+                  }}
+                >
+                  <CardContent>
+                    <Box sx={{ mb: 2 }}>{item.icon}</Box>
+                    <Typography variant="h5" component="h3" gutterBottom sx={{ fontWeight: 600, color: theme.palette.primary.light }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  </CardContent>
+                </MotionCard>
+              </Grid>
+            ))}
           </Grid>
         </Container>
       </Box>

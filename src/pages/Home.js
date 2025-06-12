@@ -166,6 +166,29 @@ const Home = () => {
             }
           }}
         />
+        {/* Additional Decorative Image */}
+        <Box
+          component="img"
+          src="/roblox_character1.png"
+          alt="Roblox Character 1"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: 'auto',
+            width: { xs: '30%', md: '20%' },
+            opacity: 0.5,
+            pointerEvents: 'none',
+            transform: 'translateX(-20%)',
+            filter: 'drop-shadow(0 0 15px rgba(0,255,255,0.5))',
+            animation: 'float 6s ease-in-out infinite',
+            '@keyframes float': {
+              '0%': { transform: 'translateX(-20%) translateY(0px)' },
+              '50%': { transform: 'translateX(-20%) translateY(-20px)' },
+              '100%': { transform: 'translateX(-20%) translateY(0px)' }
+            }
+          }}
+        />
       </Box>
 
       {/* Features Section */}
